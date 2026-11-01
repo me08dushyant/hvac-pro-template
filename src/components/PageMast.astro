@@ -1,0 +1,67 @@
+---
+// The shared page-intro band every interior page opens with (mirrors
+// MastV2.dc.html): a mono kicker, a big headline, and a supporting line.
+import Kicker from './Kicker.astro';
+
+interface Props {
+  kicker: string;
+  title: string;
+  sub: string;
+}
+
+const { kicker, title, sub } = Astro.props;
+---
+
+<section class="mast">
+  <div class="wrap mast-row" data-reveal-group>
+    <div data-reveal-item>
+      <Kicker text={kicker} tone="light" class="mast-kicker" />
+      <h1 class="mast-title">{title}</h1>
+    </div>
+    <p class="mast-sub" data-reveal-item>{sub}</p>
+  </div>
+</section>
+
+<style>
+  .mast {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .mast-row {
+    padding: 72px 0 64px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: end;
+  }
+
+  .mast-kicker {
+    margin-bottom: 30px;
+  }
+
+  .mast-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .mast-sub {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+
+  @media (max-width: 860px) {
+    .mast-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 48px 24px 40px;
+    }
+  }
+</style>

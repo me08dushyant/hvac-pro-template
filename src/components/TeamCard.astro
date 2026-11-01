@@ -1,0 +1,56 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  no: string;
+  name: string;
+  role: string;
+  photo?: string;
+  class?: string;
+}
+
+const { no, name, role, photo, class: className } = Astro.props;
+---
+
+<div class:list={['team-card', className]} data-reveal-item>
+  <div class="team-card-photo">
+    <ImagePlaceholder label="Portrait" photo={photo} ratio="4/5" />
+  </div>
+  <div class="team-card-body">
+    <div class="team-card-no">{no}</div>
+    <h3 class="team-card-name">{name}</h3>
+    <div class="team-card-role">{role}</div>
+  </div>
+</div>
+
+<style>
+  .team-card {
+    background: var(--bg);
+  }
+
+  .team-card-body {
+    padding: 22px;
+  }
+
+  .team-card-no {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+
+  .team-card-name {
+    margin: 0 0 6px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .team-card-role {
+    font-size: 15px;
+    color: var(--text-body-2);
+    line-height: 1.45;
+  }
+</style>

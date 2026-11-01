@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / CAREERS" title="For engineers who want to see how it turned out." sub="If you have ever produced a drawing and never learned whether it worked on site, this is the opposite of that job." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:0 32px">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-left:1px solid #E1E3E9;border-right:1px solid #E1E3E9">
+        <div style="min-height:440px;background:#E8EAEF"><image-slot id="v2-careers" shape="rect" placeholder="Team on site"></image-slot></div>
+        <div style="padding:56px 44px;border-left:1px solid #E1E3E9">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4302A;margin-bottom:26px">02 / WHAT IT IS LIKE</div>
+          <div style="border-top:1px solid #0B0D14">
+            <div style="padding:20px 0;border-bottom:1px solid #E1E3E9"><h3 style="margin:0 0 7px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.025em">Site time, not just CAD time</h3><p style="margin:0;font-size:16px;line-height:1.6;color:#4A5265">Designers attend commissioning. You find out whether your calculation held.</p></div>
+            <div style="padding:20px 0;border-bottom:1px solid #E1E3E9"><h3 style="margin:0 0 7px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.025em">Certification paid for</h3><p style="margin:0;font-size:16px;line-height:1.6;color:#4A5265">ASHRAE, ISPE, and cleanroom testing certifications funded and scheduled in work hours.</p></div>
+            <div style="padding:20px 0;border-bottom:1px solid #E1E3E9"><h3 style="margin:0 0 7px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.025em">Two offices, one team</h3><p style="margin:0;font-size:16px;line-height:1.6;color:#4A5265">Uttara for design and commercial, Gazipur for fabrication and the spares depot.</p></div>
+            <div style="padding:20px 0;border-bottom:1px solid #E1E3E9"><h3 style="margin:0 0 7px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.025em">The usual, properly</h3><p style="margin:0;font-size:16px;line-height:1.6;color:#4A5265">Two festival bonuses, medical coverage, provident fund, and site allowance.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:64px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4302A;margin-bottom:24px">03 / OPEN POSITIONS</div>
+      <h2 style="margin:0 0 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:44px;line-height:1.03;letter-spacing:-.04em">Five roles open right now.</h2>
+      <p style="margin:0 0 40px;font-size:17px;color:#4A5265">Send your CV to careers@hvacpro.com with the role title in the subject line.</p>
+      <div style="border-top:1px solid #0B0D14">
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="5">
+          <a href="Contact.dc.html" style="display:grid;grid-template-columns:70px minmax(0,1.3fr) minmax(0,1fr) minmax(0,0.7fr) 40px;gap:24px;align-items:center;padding:26px 4px;border-bottom:1px solid #E1E3E9" style-hover="background:#EDEFF4">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A6272">{{ r.no }}</span>
+            <span>
+              <span style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">{{ r.title }}</span>
+              <span style="display:block;font-size:16px;line-height:1.5;color:#4A5265;margin-top:6px">{{ r.desc }}</span>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A6272">{{ r.place }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A6272">{{ r.exp }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:16px;color:#1B4DFF;text-align:right">→</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROLES = [
+  ["Senior HVAC design engineer", "Load calculations, air handler selection, and duct design for classified facilities.", "UTTARA, DHAKA", "5+ YEARS"],
+  ["Validation engineer (CQV)", "Author and execute IQ/OQ/PQ protocols; operate calibrated test instrumentation.", "DHAKA · SITE TRAVEL", "3+ YEARS"],
+  ["Cleanroom site supervisor", "Lead panel and finishing crews; own site QA checklists and daily progress reporting.", "PROJECT SITES", "4+ YEARS"],
+  ["Service technician — maintenance", "Scheduled service, filter changes, and emergency callout across client sites.", "GAZIPUR DEPOT", "2+ YEARS"],
+  ["Business development executive", "Technical sales into pharmaceutical, healthcare, and food processing accounts.", "UTTARA, DHAKA", "2+ YEARS"]
+];
+class Component extends DCLogic {
+  renderVals() {
+    return { roles: ROLES.map(([title, desc, place, exp], i) => ({ title, desc, place, exp, no: String(i + 1).padStart(2, "0") })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+---
+// Small mono-spaced eyebrow label, e.g. "02 / ORIGIN".
+// `tone` picks the right accent colour for the section it sits on.
+interface Props {
+  text: string;
+  tone?: 'light' | 'dark' | 'blue';
+  class?: string;
+}
+
+const { text, tone = 'light', class: className, ...rest } = Astro.props;
+---
+
+<div class:list={['kicker', `kicker--${tone}`, className]} {...rest}>{text}</div>
+
+<style>
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.01em;
+  }
+
+  .kicker--light {
+    color: var(--red-deep);
+  }
+
+  .kicker--dark {
+    color: var(--red);
+  }
+
+  .kicker--blue {
+    color: var(--blue-soft);
+  }
+</style>

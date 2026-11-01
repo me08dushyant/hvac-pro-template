@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageMast from '../../components/PageMast.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { CATEGORIES, PRODUCTS } from '../../data/products.js';
+---
+
+<BaseLayout
+  title="Equipment"
+  description="Modular cleanrooms, air handling units, filtration, process utilities, and cold chain equipment — specified, installed, and maintained by our own payroll."
+>
+  <PageMast
+    kicker="01 / EQUIPMENT"
+    title="Only what we can stand behind."
+    sub="We do not list a catalogue we cannot service. Everything here is specified, installed, and maintained by people on our own payroll."
+  />
+
+  <section class="catalogue">
+    <div class="wrap">
+      <div class="filter-row">
+        <div class="filters" role="tablist" data-reveal-group>
+          {CATEGORIES.map((cat) => (
+            <button
+              type="button"
+              class="filter-btn"
+              data-cat={cat}
+              data-reveal-item
+              aria-selected={cat === 'ALL' ? 'true' : 'false'}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <span class="count" id="product-count">{String(PRODUCTS.length).padStart(2, '0')} ITEMS</span>
+      </div>
+
+      <div class="product-grid" data-reveal-group>
+        {PRODUCTS.map((p) => (
+          <div class="product-cell" data-product-cat={p.cat}>
+            <ProductCard
+              name={p.name}
+              href={`/products/${p.slug}`}
+              imageLabel={p.name}
+              photo={p.photo}
+              eyebrow={p.cat}
+              eyebrowTone="blue"
+              desc={p.desc}
+              footnote={p.spec}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap, ScrollTrigger } from '../../scripts/motion.js';
+
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-btn'));
+  const cells = Array.from(document.querySelectorAll<HTMLElement>('[data-product-cat]'));
+  const countEl = document.getElementById('product-count');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      buttons.forEach((b) => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+
+      const toShow: HTMLElement[] = [];
+      const toHide: HTMLElement[] = [];
+      let visible = 0;
+
+      cells.forEach((cell) => {
+        const match = cat === 'ALL' || cell.dataset.productCat === cat;
+        if (match) visible += 1;
+        if (match && cell.hidden) toShow.push(cell);
+        else if (!match && !cell.hidden) toHide.push(cell);
+      });
+
+      if (countEl) countEl.textContent = String(visible).padStart(2, '0') + ' ITEMS';
+
+      const outCards = toHide.map((c) => c.querySelector('.pcard')).filter(Boolean) as HTMLElement[];
+      const inCards = toShow.map((c) => c.querySelector('.pcard')).filter(Boolean) as HTMLElement[];
+
+      // Filtering changes the grid's height — keep the rest of the page's
+      // ScrollTriggers (footer reveal, etc.) in sync as that height settles.
+      if (outCards.length) {
+        gsap.to(outCards, {
+          autoAlpha: 0,
+          scale: 0.96,
+          duration: 0.2,
+          ease: 'power1.in',
+          overwrite: true,
+          onComplete: () => {
+            toHide.forEach((c) => (c.hidden = true));
+            ScrollTrigger.refresh();
+          },
+        });
+      }
+      if (inCards.length) {
+        toShow.forEach((c) => (c.hidden = false));
+        gsap.fromTo(
+          inCards,
+          { autoAlpha: 0, scale: 0.96 },
+          {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: 'power2.out',
+            stagger: 0.025,
+            delay: outCards.length ? 0.12 : 0,
+            overwrite: true,
+          }
+        );
+        ScrollTrigger.refresh();
+      }
+    });
+  });
+</script>
+
+<style>
+  .catalogue {
+    border-bottom: 1px solid var(--border);
+    padding: 36px 0 84px;
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 34px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 22px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .filter-btn {
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    background: #E7E9EF;
+    color: var(--text-body);
+  }
+
+  .filter-btn[aria-selected='true'] {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+  }
+
+  .product-cell {
+    display: contents;
+  }
+
+  .product-cell[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .product-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

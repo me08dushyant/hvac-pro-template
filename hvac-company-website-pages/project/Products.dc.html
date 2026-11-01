@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / EQUIPMENT" title="Only what we can stand behind." sub="We do not list a catalogue we cannot service. Everything here is specified, installed, and maintained by people on our own payroll." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:36px 32px 84px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;margin-bottom:34px;border-bottom:1px solid #E1E3E9;padding-bottom:22px">
+        <sc-for list="{{ categories }}" as="c" hint-placeholder-count="7">
+          <button type="button" onClick="{{ c.select }}" style="padding:10px 18px;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em;background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+        </sc-for>
+        <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A6272">{{ countLabel }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#D8DBE4;border:1px solid #D8DBE4">
+        <sc-for list="{{ visible }}" as="p" hint-placeholder-count="8">
+          <a href="ProductDetail.dc.html" style="display:block;background:#F5F6F8;padding:26px" style-hover="background:#fff">
+            <div style="height:140px;margin-bottom:22px"><image-slot id="{{ p.slot }}" shape="rect" fit="contain" placeholder="{{ p.name }}"></image-slot></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#1B4DFF;margin-bottom:10px">{{ p.cat }}</div>
+            <h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em;line-height:1.18">{{ p.name }}</h3>
+            <p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#4A5265">{{ p.desc }}</p>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;border-top:1px solid #DDE0E8;padding-top:12px">{{ p.spec }}</div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CATS = ["ALL", "CLEANROOM", "HVAC", "FILTRATION", "UTILITIES", "PROCESSING", "COLD CHAIN"];
+const ITEMS = [
+  ["Modular cleanroom systems", "CLEANROOM", "Wall and ceiling panel envelopes with hermetic doors, vision panels, and integrated return risers.", "50 / 80 / 100 mm PU–PIR"],
+  ["Pass boxes & air showers", "CLEANROOM", "Static and dynamic transfer hatches with electromagnetic interlocks and optional UV cycle.", "Interlocked · HEPA H14"],
+  ["Cleanroom doors & windows", "CLEANROOM", "Flush-fit hermetic leaves, gasketed frames, and double-glazed vision panels for classified partitions.", "Single / double leaf"],
+  ["Gowning & change rooms", "CLEANROOM", "Cross-over benches, lockers, and pressure-cascaded airlocks sized for peak shift changeover.", "3-step gowning"],
+  ["Double-skin air handling units", "HVAC", "Thermal-break casing, EC plug fans, and multi-stage filtration sized against a measured heat load.", "2k – 60k m³/h"],
+  ["Ducting & air distribution", "HVAC", "GI and pre-insulated ducting, volume control dampers, and low-turbulence terminal diffusers.", "Leakage class C"],
+  ["Environmental monitoring", "HVAC", "Pressure, temperature, and humidity monitoring with alarm escalation and audit-trailed records.", "21 CFR Part 11"],
+  ["Dehumidification systems", "HVAC", "Desiccant and refrigerant units for low-humidity granulation, coating, and packing areas.", "Down to 15% RH"],
+  ["Terminal HEPA & ULPA", "FILTRATION", "Gel-seal frames, housings, and terminal modules supplied with factory integrity certificates.", "H13 – U15"],
+  ["Laminar flow units", "FILTRATION", "Horizontal and vertical benches and ceiling modules for aseptic and weighing operations.", "0.45 m/s ± 20%"],
+  ["Biosafety cabinets", "FILTRATION", "Class II A2 and B2 cabinets certified on site for downflow and inflow velocity.", "Class II A2 / B2"],
+  ["Dust extraction & containment", "FILTRATION", "Reverse-pulse collectors and downflow booths for potent and high-dust compound handling.", "OEB 3 – 4"],
+  ["Purified water & WFI", "UTILITIES", "RO, EDI, and distillation trains with sanitisable distribution loops and sample point mapping.", "USP / Ph. Eur."],
+  ["Clean steam generators", "UTILITIES", "Pure steam generation and distribution for sterilisation and CIP/SIP circuits.", "HTM 2031 quality"],
+  ["Chillers & utility plant", "UTILITIES", "Air and water-cooled chillers, pump sets, and headers sized for continuous duty with redundancy.", "50 – 800 TR"],
+  ["Compressed air systems", "UTILITIES", "Oil-free compressors, dryers, receivers, and point-of-use filtration with quality testing.", "ISO 8573-1 Class 1"],
+  ["Processing & packaging lines", "PROCESSING", "Conveying, filling, and secondary packaging machinery integrated into hygienic production flows.", "Turnkey integration"],
+  ["Granulation & coating", "PROCESSING", "Rapid mixer granulators, fluid bed dryers, and coating pans with containment options.", "10 – 600 L"],
+  ["CIP / SIP skids", "PROCESSING", "Automated clean- and sterilise-in-place skids with recipe control and batch reporting.", "Recipe controlled"],
+  ["Cold rooms & freezer stores", "COLD CHAIN", "Validated cold storage with redundant plant, alarm escalation, and continuous data logging.", "−20 to +8 °C"],
+  ["Stability chambers", "COLD CHAIN", "ICH-condition chambers with mapped uniformity and audit-trailed environmental capture.", "ICH Q1A conditions"],
+  ["Distribution cold chain", "COLD CHAIN", "Insulated shippers, loggers, and qualification of distribution routes and packouts.", "Route qualified"]
+];
+class Component extends DCLogic {
+  state = { cat: "ALL" };
+  renderVals() {
+    const active = this.state.cat;
+    const visible = ITEMS.filter(p => active === "ALL" || p[1] === active).map(([name, cat, desc, spec]) => ({
+      name, cat, desc, spec, slot: "v2p-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    }));
+    return {
+      categories: CATS.map(label => ({
+        label,
+        bg: label === active ? "#0B0D14" : "#E7E9EF",
+        fg: label === active ? "#FFFFFF" : "#3A4152",
+        select: () => this.setState({ cat: label })
+      })),
+      visible,
+      countLabel: String(visible.length).padStart(2, "0") + " ITEMS"
+    };
+  }
+}
+</script>
+</body>
+</html>

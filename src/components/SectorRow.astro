@@ -1,0 +1,131 @@
+---
+// Full-width alternating image/copy row — the Industries sector list.
+import { Icon } from 'astro-icon/components';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  no: string;
+  name: string;
+  body: string;
+  cls: string;
+  reg: string;
+  risk: string;
+  icon?: string;
+  photo?: string;
+  class?: string;
+}
+
+const { no, name, body, cls, reg, risk, icon, photo, class: className } = Astro.props;
+---
+
+<div class:list={['sector', className]} data-reveal-item>
+  <div class="sector-img">
+    <ImagePlaceholder label={name} photo={photo} />
+  </div>
+  <div class="sector-body">
+    <div class="sector-no">
+      {icon && <Icon name={icon} class="sector-icon" />}
+      {no}
+    </div>
+    <h2 class="sector-name">{name}</h2>
+    <p class="sector-desc">{body}</p>
+    <div class="sector-facts">
+      <div>
+        <div class="sector-fact-label">TYPICAL CLASS</div>
+        <div class="sector-fact-value">{cls}</div>
+      </div>
+      <div>
+        <div class="sector-fact-label">INSPECTED BY</div>
+        <div class="sector-fact-value">{reg}</div>
+      </div>
+      <div>
+        <div class="sector-fact-label">CRITICAL RISK</div>
+        <div class="sector-fact-value">{risk}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sector {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sector-img {
+    min-height: 340px;
+    background: var(--surface);
+  }
+
+  .sector-body {
+    padding: 44px 40px;
+    border-left: 1px solid var(--border);
+  }
+
+  .sector-no {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red-deep);
+    margin-bottom: 20px;
+  }
+
+  .sector-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sector-name {
+    margin: 0 0 16px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .sector-desc {
+    margin: 0 0 26px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-body);
+    max-width: 620px;
+  }
+
+  .sector-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .sector-fact-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+  }
+
+  .sector-fact-value {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 820px) {
+    .sector {
+      grid-template-columns: 1fr;
+    }
+    .sector-body {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+    }
+    .sector-facts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

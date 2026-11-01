@@ -1,0 +1,356 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import Kicker from '../components/Kicker.astro';
+import GateCard from '../components/GateCard.astro';
+import { SCOPES, GATES } from '../data/scopes.js';
+---
+
+<BaseLayout
+  title="Services"
+  description="Six disciplines, one accountable party — cleanroom design & build, HVAC engineering, validation, process utilities, equipment integration, and maintenance."
+>
+  <PageMast
+    kicker="01 / SERVICES"
+    title="Six disciplines, one accountable party."
+    sub="Split a controlled environment across three vendors and the gaps between them become your problem. We took the gaps out of the contract."
+  />
+
+  <section class="services">
+    <div class="wrap">
+      <Kicker text="THE SIX DISCIPLINES" tone="light" class="services-kicker" data-reveal />
+      <div class="services-list" data-reveal-group>
+        {SCOPES.map((s, i) => (
+          <div class="service" id={`service-${i}`} data-service={i} data-reveal-item>
+            <button type="button" class="service-head" data-service-toggle={i} aria-expanded={i === 0 ? 'true' : 'false'}>
+              <span class="service-no">{s.no}</span>
+              <span class="service-title">{s.title}</span>
+              <span class="service-lead">{s.lead}</span>
+              <span class="service-mark" data-service-mark={i}>{i === 0 ? '−' : '+'}</span>
+            </button>
+            <div class="service-body" data-service-body={i} hidden={i !== 0}>
+              <div class="service-body-inner">
+                <span></span>
+                <p class="service-copy">{s.body}</p>
+                <div>
+                  <div class="service-deliv-label">DELIVERABLES</div>
+                  {s.items.map((it) => (
+                    <div class="service-item">{it}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sequence">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="02 / SEQUENCE" tone="dark" />
+        <h2 class="sequence-title">Nothing moves to the next gate until the last one is signed.</h2>
+        <p class="sequence-sub">Slow at gate two, fast at gate five. That trade is the whole method.</p>
+      </div>
+      <div class="sequence-grid" data-reveal-group>
+        {GATES.map((g) => (
+          <GateCard tag={g.tag} title={g.title} body={g.body} highlight={g.highlight} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap, ScrollTrigger, ScrollSmoother, reduceMotion } from '../scripts/motion.js';
+
+  // Home's SCOPE list links here as `/services#service-<index>` so each row
+  // opens its own matching accordion item rather than always landing on
+  // the first one (which is all every row used to point at). The server
+  // render has no idea what the requested hash is — Astro is static, and a
+  // fragment never reaches the server — so it always marks index 0 open;
+  // this corrects that against the real hash before anything is visible.
+  const hashMatch = window.location.hash.match(/^#service-(\d+)$/);
+  const requestedOpen = hashMatch ? Number(hashMatch[1]) : 0;
+
+  // Smooth open/close instead of the instant `hidden` swap: measure the
+  // panel's natural height, then tween height + opacity to/from it.
+  document.querySelectorAll<HTMLElement>('[data-service-toggle]').forEach((btn) => {
+    const idx = Number(btn.dataset.serviceToggle);
+    const body = document.querySelector<HTMLElement>(`[data-service-body="${idx}"]`);
+    const mark = document.querySelector<HTMLElement>(`[data-service-mark="${idx}"]`);
+    if (!body) return;
+
+    const startOpen = idx === requestedOpen;
+    body.hidden = false;
+    btn.setAttribute('aria-expanded', startOpen ? 'true' : 'false');
+    if (mark) mark.textContent = startOpen ? '−' : '+';
+    gsap.set(body, { overflow: 'hidden', height: startOpen ? 'auto' : 0, opacity: startOpen ? 1 : 0 });
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (mark) mark.textContent = isOpen ? '+' : '−';
+
+      if (isOpen) {
+        gsap.to(body, {
+          height: 0,
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power2.inOut',
+          overwrite: true,
+          onComplete: () => ScrollTrigger.refresh(),
+        });
+      } else {
+        gsap.set(body, { height: 'auto' });
+        const fullHeight = body.offsetHeight;
+        gsap.fromTo(
+          body,
+          { height: 0, opacity: 0 },
+          {
+            height: fullHeight,
+            opacity: 1,
+            duration: 0.45,
+            ease: 'power2.inOut',
+            overwrite: true,
+            onComplete: () => {
+              gsap.set(body, { height: 'auto' });
+              ScrollTrigger.refresh();
+            },
+          }
+        );
+      }
+    });
+  });
+
+  // "02 / SEQUENCE" — the whole block (heading, sub-line, and the gate
+  // row) locks in place once IT — not just the grid — reaches the centre
+  // of the screen, and further scrolling sweeps the highlight across the
+  // gates instead of moving the page. Trigger and pin both target
+  // `.sequence` now: centring against the grid alone (trigger used to be
+  // `.sequence-grid`) left the taller heading+grid block sitting high in
+  // the viewport once pinned, close to the top rather than actually
+  // centred — the grid was centred, but the block as a whole wasn't.
+  // GSAP inserts the extra scroll room this needs on its own (this
+  // section sits close to the bottom of the page, so without a pin a
+  // fixed scroll distance here could run past what the page actually has
+  // left). `anticipatePin` avoids a small jump right at the pin point,
+  // needed because it starts mid-viewport rather than at the top. Once
+  // the sweep reaches gate five the page unpins and scrolling continues
+  // normally. Reduced-motion visitors keep the static default (gate five
+  // highlighted) baked into the GATES data instead.
+  const gates = Array.from(document.querySelectorAll<HTMLElement>('.sequence-grid .gate'));
+  if (gates.length && !reduceMotion) {
+    gates.forEach((g) => g.classList.remove('gate--highlight'));
+
+    ScrollTrigger.create({
+      trigger: '.sequence',
+      start: 'center center',
+      end: '+=750',
+      pin: '.sequence',
+      anticipatePin: 1,
+      scrub: 0.4,
+      onUpdate: (self) => {
+        const active = Math.min(gates.length - 1, Math.floor(self.progress * gates.length));
+        gates.forEach((g, idx) => g.classList.toggle('gate--highlight', idx === active));
+      },
+    });
+  }
+
+  // The browser already jumps to #service-<n> on load, natively and
+  // instantly, before this runs — but ScrollSmoother (see motion.js)
+  // remaps real scroll position onto a lagged, transformed content layer,
+  // so that native jump can land short or overshoot. Re-issue it through
+  // the smoother once the accordion above has set the right panel's real
+  // height, so the target settles in the right place either way.
+  if (hashMatch) {
+    const target = document.getElementById(`service-${requestedOpen}`);
+    if (target) {
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        const smoother = ScrollSmoother.get();
+        if (smoother) smoother.scrollTo(target, false, 'top 140px');
+        else target.scrollIntoView({ block: 'start' });
+      });
+    }
+  }
+</script>
+
+<style>
+  .services {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 84px;
+  }
+
+  /* Gives the bold top rule below something to read as belonging to —
+     without it the border-strong line on .services-list looked like a
+     stray heavy rule with no heading anchoring it, unlike the matching
+     list on Home which sits right under its own "03 / SCOPE" kicker. */
+  :global(.services-kicker) {
+    display: block;
+    margin-bottom: 22px;
+  }
+
+  .services-list {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .service {
+    border-bottom: 1px solid var(--border);
+    /* Keeps a deep-linked section (e.g. #service-2 from Home's SCOPE list)
+       clear of the sticky header on the native, pre-JS anchor jump; the
+       script below then re-scrolls precisely via ScrollSmoother. */
+    scroll-margin-top: 140px;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Hover lives on the whole row, not just the head. The head and the
+     collapsible body are two separate boxes stacked inside it — hovering
+     only the head left a hard seam right where the (once-hidden, now
+     expanded) body started, since that area stayed unhighlighted. Same
+     row-level fix as the SCOPE list on Home, just accounting for the
+     extra body box services rows have and ListRow doesn't. */
+  .service:hover {
+    background: var(--bg-alt);
+  }
+
+  .service:hover .service-mark {
+    transform: scale(1.2);
+  }
+
+  .service-head {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    padding: 30px 4px;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1.1fr) minmax(0, 1.4fr) 32px;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .service-no {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .service-title {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.6vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .service-lead {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-body-2);
+  }
+
+  .service-mark {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--blue);
+    text-align: right;
+    transition: transform 0.3s ease;
+  }
+
+  /* This element's height is what the open/close script (see below)
+     tweens to/from 0 — it must carry no padding of its own. With
+     box-sizing: border-box, an explicit height can never shrink below an
+     element's own padding, so a closed row was never truly 0px: it sat at
+     a fixed ~34px (this box's old bottom padding) no matter what height
+     GSAP set, which read as a bigger gap below each heading than above
+     it. The padding and grid layout now live on .service-body-inner
+     instead, which this box just clips via overflow when collapsed. */
+  .service-body-inner {
+    padding: 0 4px 34px;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .service-copy {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+
+  .service-deliv-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .service-item {
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sequence {
+    background: var(--ink);
+    color: #fff;
+    padding: 76px 0 84px;
+  }
+
+  .sequence-title {
+    margin: 24px 0 16px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 46px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+    max-width: 680px;
+  }
+
+  .sequence-sub {
+    margin: 0 0 46px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-slate);
+    max-width: 520px;
+  }
+
+  .sequence-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .service-head {
+      grid-template-columns: 40px 1fr;
+      row-gap: 8px;
+    }
+    .service-lead,
+    .service-mark {
+      display: none;
+    }
+    .service-body {
+      grid-template-columns: 1fr;
+    }
+    .service-body span:first-child {
+      display: none;
+    }
+    .sequence-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .sequence-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

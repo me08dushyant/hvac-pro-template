@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import Kicker from '../components/Kicker.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import DarkPanel from '../components/DarkPanel.astro';
+import TimelineRow from '../components/TimelineRow.astro';
+import { COMMITMENTS, TIMELINE } from '../data/about.js';
+import { pexels } from '../lib/pexels.js';
+---
+
+<BaseLayout
+  title="Firm"
+  description="Design, build, validate, maintain — same signature on all four. The firm we kept wishing existed."
+>
+  <PageMast
+    kicker="01 / THE FIRM"
+    title="We started because handover kept going wrong."
+    sub="Not the construction — the proof. Rooms got built, then argued about for months. So we put design, build, and qualification under one signature."
+  />
+
+  <section class="origin">
+    <div class="wrap origin-frame">
+      <div class="origin-img" data-reveal>
+        <ImagePlaceholder label="Site or workshop photo" photo={pexels(8961025, 1000)} />
+      </div>
+      <div class="origin-copy" data-reveal>
+        <Kicker text="02 / ORIGIN" tone="light" />
+        <h2 class="origin-title">Founded on an unglamorous frustration.</h2>
+        <p class="origin-p">
+          In 2018 our founders kept being called in to rescue finished cleanrooms that could not be qualified. The
+          panels were fine. The air handler was fine. What was missing was anyone who had thought about the two
+          together — and anyone willing to sign for the result.
+        </p>
+        <p class="origin-p">
+          So we built the firm we kept wishing existed: designers who attend commissioning, validators on staff
+          rather than hired at the end, and a service team that inherits the drawings instead of guessing at them.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="commitments">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="03 / HOW WE WORK" tone="dark" />
+        <h2 class="commitments-title">Three commitments that decide everything else.</h2>
+      </div>
+      <div class="commitments-grid" data-reveal-group>
+        {COMMITMENTS.map((c) => (
+          <DarkPanel no={c.no} title={c.title} body={c.body} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="04 / TIMELINE" tone="light" />
+        <h2 class="timeline-title">Eight years, four decisions that mattered.</h2>
+      </div>
+      <div class="timeline-list" data-reveal-group>
+        {TIMELINE.map((t) => (
+          <TimelineRow year={t.year} title={t.title} body={t.body} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .origin {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .origin-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .origin-img {
+    min-height: 420px;
+    background: var(--surface);
+  }
+
+  .origin-copy {
+    padding: 72px 56px;
+    border-left: 1px solid var(--border);
+  }
+
+  .origin-title {
+    margin: 28px 0 26px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.6vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .origin-p {
+    margin: 0 0 18px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+
+  .origin-p:last-child {
+    margin-bottom: 0;
+  }
+
+  .commitments {
+    border-bottom: 1px solid var(--border);
+    background: var(--ink);
+    color: #fff;
+    padding: 76px 0 84px;
+  }
+
+  .commitments-title {
+    margin: 24px 0 48px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 46px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+    max-width: 720px;
+  }
+
+  .commitments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .timeline {
+    border-bottom: 1px solid var(--border);
+    padding: 76px 0 84px;
+  }
+
+  .timeline-title {
+    margin: 24px 0 44px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 46px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .timeline-list {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  @media (max-width: 900px) {
+    .origin-frame {
+      grid-template-columns: 1fr;
+    }
+    .origin-copy {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+    .commitments-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

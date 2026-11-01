@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / SERVICES" title="Six disciplines, one accountable party." sub="Split a controlled environment across three vendors and the gaps between them become your problem. We took the gaps out of the contract." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:64px 32px 84px">
+      <div style="border-top:1px solid #0B0D14">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #E1E3E9">
+            <button type="button" onClick="{{ s.toggle }}" style="width:100%;text-align:left;cursor:pointer;background:none;border:none;font-family:'Instrument Sans',sans-serif;padding:30px 4px;display:grid;grid-template-columns:70px minmax(0,1.1fr) minmax(0,1.4fr) 40px;gap:28px;align-items:center">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A6272">{{ s.no }}</span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.03em;color:#0B0D14">{{ s.title }}</span>
+              <span style="font-size:16px;line-height:1.55;color:#4A5265">{{ s.lead }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:18px;color:#1B4DFF;text-align:right">{{ s.mark }}</span>
+            </button>
+            <sc-if value="{{ s.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 4px 34px;display:grid;grid-template-columns:70px minmax(0,1fr) minmax(0,1fr);gap:28px">
+                <span></span>
+                <p style="margin:0;font-size:17px;line-height:1.65;color:#3A4152">{{ s.body }}</p>
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;margin-bottom:14px">DELIVERABLES</div>
+                  <sc-for list="{{ s.items }}" as="it" hint-placeholder-count="4">
+                    <div style="font-size:16px;line-height:1.5;padding:8px 0;border-bottom:1px solid #E1E3E9">{{ it }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9;background:#0B0D14;color:#fff">
+    <div style="max-width:1320px;margin:0 auto;padding:76px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF3B2F;margin-bottom:24px">02 / SEQUENCE</div>
+      <h2 style="margin:0 0 16px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:46px;line-height:1.03;letter-spacing:-.04em;max-width:680px">Nothing moves to the next gate until the last one is signed.</h2>
+      <p style="margin:0 0 46px;font-size:17px;line-height:1.6;color:#9AA3B5;max-width:520px">Slow at gate two, fast at gate five. That trade is the whole method.</p>
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px">
+        <div style="background:#131722;padding:32px 26px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF3B2F">GATE 01</div><div><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em">Survey &amp; URS</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#B4BCCB">Site survey, user requirements, and a costed concept layout.</p></div></div>
+        <div style="background:#131722;padding:32px 26px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF3B2F">GATE 02</div><div><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em">Detailed design</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#B4BCCB">GA drawings, load calculations, P&amp;IDs, and design qualification.</p></div></div>
+        <div style="background:#131722;padding:32px 26px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF3B2F">GATE 03</div><div><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em">Fabricate &amp; supply</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#B4BCCB">Panels, air handlers, and procured equipment with factory testing.</p></div></div>
+        <div style="background:#131722;padding:32px 26px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF3B2F">GATE 04</div><div><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em">Install &amp; commission</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#B4BCCB">Erection, balancing, controls setup, and cascade tuning.</p></div></div>
+        <div style="background:#1B4DFF;padding:32px 26px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#BFCEFF">GATE 05</div><div><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em">Qualify &amp; hand over</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#DCE4FF">IQ/OQ/PQ execution, dossier, training, and maintenance start.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SERVICES = [
+  ["01", "Cleanroom design & build",
+   "Layout, airflow modelling, panels, flooring, and hermetic doors.",
+   "We start from the classification you have to hold and work backwards: room volumes, return paths, and door swings are settled before a panel is cut. Built with PU/PIR sandwich systems, coved seamless flooring, and flush fittings that leave nowhere for particulate to sit.",
+   ["Concept and GA drawings", "Panel, door, and window fabrication", "Epoxy or vinyl flooring with coving", "Cleanroom lighting and penetrations"]],
+  ["02", "HVAC engineering",
+   "Air handlers, duct distribution, terminal filtration, and controls.",
+   "Double-skin thermal-break air handling units with EC fans, sized against a real heat load rather than a rule of thumb. Ducting, dampers, and terminal HEPA housings installed and balanced by our own commissioning crews, then cascade-tuned room by room.",
+   ["Heat load and airflow calculations", "AHU selection and assembly", "Duct fabrication and installation", "Balancing and cascade tuning"]],
+  ["03", "Validation & qualification",
+   "DQ through PQ with owned, calibrated instrumentation.",
+   "Protocols are written by the engineers who will execute them, which is why they match the installation. Particle counts, air changes, recovery time, filter integrity, pressure cascade, and temperature mapping — all measured with instruments we own and calibrate annually.",
+   ["DQ / IQ / OQ / PQ protocols", "DOP filter integrity testing", "Recovery and cascade studies", "Regulatory inspection attendance"]],
+  ["04", "Process utilities",
+   "Purified water, WFI, clean steam, compressed air, and chiller plant.",
+   "Generation and distribution designed as one loop, with sanitisation strategy agreed before pipe is ordered. Sampled and qualified against USP and Ph. Eur. limits, with the trend data your QA department will be asked for at inspection.",
+   ["RO / EDI / distillation trains", "Sanitisable distribution loops", "Clean steam generation", "Oil-free compressed air to ISO 8573-1"]],
+  ["05", "Equipment integration",
+   "Sourcing and commissioning machinery into hygienic flows.",
+   "We import and integrate processing and packaging equipment from manufacturers we have used before and can still get parts from. Line layout, utility connections, guarding, and operator training are part of the scope, not an afterthought.",
+   ["Vendor selection and factory testing", "Import, delivery, and installation", "Utility and line integration", "Operator and maintenance training"]],
+  ["06", "Maintenance & requalification",
+   "Scheduled service, filter changes, annual requalification, callout.",
+   "The contract does not end at handover. Maintenance agreements cover planned service visits, filter replacement on a tracked schedule, annual requalification, and emergency callout — with critical spares held at our Gazipur depot rather than on a container.",
+   ["Planned preventive maintenance", "Filter change programme", "Annual requalification", "Emergency callout cover"]]
+];
+class Component extends DCLogic {
+  state = { open: 0 };
+  renderVals() {
+    return {
+      services: SERVICES.map(([no, title, lead, body, items], i) => ({
+        no, title, lead, body, items,
+        open: this.state.open === i,
+        mark: this.state.open === i ? "−" : "+",
+        toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

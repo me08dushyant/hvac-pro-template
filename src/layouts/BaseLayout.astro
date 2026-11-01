@@ -1,0 +1,76 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  hideCta?: boolean;
+}
+
+const { title, description, hideCta = false } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title} · HVACPro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Runs before paint: only hide [data-reveal] elements when JS is
+      // actually going to animate them in, so a no-JS visit never loses
+      // content.
+      document.documentElement.classList.add('js-motion');
+    </script>
+  </head>
+  <body>
+    <div id="scroll-progress"></div>
+    <SiteHeader />
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <main>
+          <slot />
+        </main>
+        <SiteFooter hideCta={hideCta} />
+      </div>
+    </div>
+    <script>
+      import '../scripts/motion.js';
+    </script>
+  </body>
+</html>
+
+<style>
+  #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* ScrollSmoother sets #smooth-wrapper to position:fixed inline, which
+     would otherwise paint above the topbar/header (they're outside this
+     wrapper on purpose — see SiteHeader.astro). Pin it below them
+     explicitly rather than relying on z-index:auto losing to their
+     explicit z-index. */
+  #smooth-wrapper {
+    z-index: 1;
+  }
+</style>

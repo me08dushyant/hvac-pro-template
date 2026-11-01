@@ -1,0 +1,69 @@
+---
+// Photo slot. The source prototypes wire these up to an image picker
+// (`image-slot`); pass `photo` with a real image URL to render it — a
+// labelled placeholder box renders in its place otherwise.
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  label: string;
+  photo?: string;
+  fit?: 'cover' | 'contain';
+  ratio?: string;
+  class?: string;
+}
+
+const { label, photo, fit = 'cover', ratio, class: className } = Astro.props;
+---
+
+{photo ? (
+  <div class:list={['ph', 'ph--photo', className]} style={ratio ? `aspect-ratio:${ratio}` : undefined}>
+    <img src={photo} alt={label} loading="lazy" decoding="async" style={`object-fit:${fit}`} />
+  </div>
+) : (
+  <div class:list={['ph', className]} style={ratio ? `aspect-ratio:${ratio}` : undefined}>
+    <Icon name="lucide:image" class="ph-icon" />
+    <span class="ph-label">{label}</span>
+  </div>
+)}
+
+<style>
+  .ph {
+    width: 100%;
+    height: 100%;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-muted);
+    overflow: hidden;
+  }
+
+  .ph--photo {
+    display: block;
+  }
+
+  .ph--photo img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ph-icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.55;
+  }
+
+  .ph-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    padding: 0 14px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>

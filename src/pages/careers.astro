@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import Kicker from '../components/Kicker.astro';
+import ListRow from '../components/ListRow.astro';
+import { CULTURE_POINTS, ROLES } from '../data/roles.js';
+import { pexels } from '../lib/pexels.js';
+---
+
+<BaseLayout
+  title="Careers"
+  description="Five roles open right now. Designers who attend commissioning, certifications funded, and two offices working as one team."
+>
+  <PageMast
+    kicker="01 / CAREERS"
+    title="For engineers who want to see how it turned out."
+    sub="If you have ever produced a drawing and never learned whether it worked on site, this is the opposite of that job."
+  />
+
+  <section class="culture">
+    <div class="wrap culture-frame">
+      <div class="culture-img" data-reveal>
+        <ImagePlaceholder label="Team on site" photo={pexels(8961126, 1000)} />
+      </div>
+      <div class="culture-copy" data-reveal>
+        <Kicker text="02 / WHAT IT IS LIKE" tone="light" />
+        <div class="culture-list" data-reveal-group>
+          {CULTURE_POINTS.map((c) => (
+            <div class="culture-item" data-reveal-item>
+              <h3 class="culture-title">{c.title}</h3>
+              <p class="culture-body">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roles">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="03 / OPEN POSITIONS" tone="light" />
+        <h2 class="roles-title">Five roles open right now.</h2>
+        <p class="roles-sub">Send your CV to careers@hvacpro.com with the role title in the subject line.</p>
+      </div>
+      <div class="roles-list" data-reveal-group>
+        {ROLES.map((r, i) => (
+          <ListRow
+            no={String(i + 1).padStart(2, '0')}
+            title={r.title}
+            desc={r.desc}
+            meta={[r.place, r.exp]}
+            href="/contact"
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .culture {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .culture-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .culture-img {
+    min-height: 360px;
+    background: var(--surface);
+  }
+
+  .culture-copy {
+    padding: 56px 44px;
+    border-left: 1px solid var(--border);
+  }
+
+  .culture-list {
+    border-top: 1px solid var(--border-strong);
+    margin-top: 26px;
+  }
+
+  .culture-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .culture-title {
+    margin: 0 0 7px;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .culture-body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body-2);
+  }
+
+  .roles {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 84px;
+  }
+
+  .roles-title {
+    margin: 24px 0 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.8vw, 44px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .roles-sub {
+    margin: 0 0 40px;
+    font-size: 17px;
+    color: var(--text-body-2);
+  }
+
+  .roles-list {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  @media (max-width: 900px) {
+    .culture-frame {
+      grid-template-columns: 1fr;
+    }
+    .culture-copy {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / THE FIRM" title="We started because handover kept going wrong." sub="Not the construction — the proof. Rooms got built, then argued about for months. So we put design, build, and qualification under one signature." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:0 32px">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-left:1px solid #E1E3E9;border-right:1px solid #E1E3E9">
+        <div style="min-height:520px;background:#E8EAEF"><image-slot id="v2-about-1" shape="rect" placeholder="Site or workshop photo"></image-slot></div>
+        <div style="padding:72px 56px;border-left:1px solid #E1E3E9">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4302A;margin-bottom:28px">02 / ORIGIN</div>
+          <h2 style="margin:0 0 26px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.04em">Founded on an unglamorous frustration.</h2>
+          <p style="margin:0 0 18px;font-size:17px;line-height:1.65;color:#3A4152">In 2018 our founders kept being called in to rescue finished cleanrooms that could not be qualified. The panels were fine. The air handler was fine. What was missing was anyone who had thought about the two together — and anyone willing to sign for the result.</p>
+          <p style="margin:0;font-size:17px;line-height:1.65;color:#3A4152">So we built the firm we kept wishing existed: designers who attend commissioning, validators on staff rather than hired at the end, and a service team that inherits the drawings instead of guessing at them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9;background:#0B0D14;color:#fff">
+    <div style="max-width:1320px;margin:0 auto;padding:76px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF3B2F;margin-bottom:24px">03 / HOW WE WORK</div>
+      <h2 style="margin:0 0 48px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:46px;line-height:1.03;letter-spacing:-.04em;max-width:720px">Three commitments that decide everything else.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px">
+        <div style="background:#131722;padding:38px 32px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:22px">01</div>
+          <h3 style="margin:0 0 14px;font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">The report is the product</h3>
+          <p style="margin:0;font-size:16px;line-height:1.65;color:#B4BCCB">A room nobody can evidence is not finished, however good it looks. We are not done until the dossier is.</p>
+        </div>
+        <div style="background:#131722;padding:38px 32px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:22px">02</div>
+          <h3 style="margin:0 0 14px;font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">No blame surface</h3>
+          <p style="margin:0;font-size:16px;line-height:1.65;color:#B4BCCB">Design, build, validate, maintain — same signature on all four. There is nowhere for a problem to hide between contracts.</p>
+        </div>
+        <div style="background:#131722;padding:38px 32px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:22px">03</div>
+          <h3 style="margin:0 0 14px;font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">Chosen for year five</h3>
+          <p style="margin:0;font-size:16px;line-height:1.65;color:#B4BCCB">We specify equipment we can still repair when the warranty is long gone and the supplier has changed distributor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:76px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4302A;margin-bottom:24px">04 / TIMELINE</div>
+      <h2 style="margin:0 0 44px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:46px;line-height:1.03;letter-spacing:-.04em">Eight years, four decisions that mattered.</h2>
+      <div style="border-top:1px solid #0B0D14">
+        <div style="display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:baseline;padding:26px 4px;border-bottom:1px solid #E1E3E9">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#1B4DFF">2018</span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">Four people, one office</span>
+          <span style="font-size:16px;line-height:1.6;color:#4A5265">Started as an HVAC design consultancy in Uttara serving local pharmaceutical manufacturers.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:baseline;padding:26px 4px;border-bottom:1px solid #E1E3E9">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#1B4DFF">2020</span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">First turnkey handover</span>
+          <span style="font-size:16px;line-height:1.6;color:#4A5265">A full ISO 7 oral solid dosage suite: air handlers, panels, and qualification documentation on one contract.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:baseline;padding:26px 4px;border-bottom:1px solid #E1E3E9">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#1B4DFF">2022</span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">Validation brought in-house</span>
+          <span style="font-size:16px;line-height:1.6;color:#4A5265">Bought our own calibrated instrumentation and hired a permanent DQ/IQ/OQ/PQ team. No more third-party scheduling.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:baseline;padding:26px 4px;border-bottom:1px solid #E1E3E9">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#1B4DFF">2025</span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.03em">Workshop and spares depot</span>
+          <span style="font-size:16px;line-height:1.6;color:#4A5265">Opened in Gazipur for panel fabrication, air handler assembly, and same-week spare availability.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+</body>
+</html>

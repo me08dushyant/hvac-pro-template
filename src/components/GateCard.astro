@@ -1,0 +1,71 @@
+---
+interface Props {
+  tag: string;
+  title: string;
+  body: string;
+  highlight?: boolean;
+  class?: string;
+}
+
+const { tag, title, body, highlight = false, class: className } = Astro.props;
+---
+
+<div class:list={['gate', highlight && 'gate--highlight', className]} data-reveal-item>
+  <div class="gate-tag">{tag}</div>
+  <div>
+    <h3 class="gate-title">{title}</h3>
+    <p class="gate-body">{body}</p>
+  </div>
+</div>
+
+<style>
+  .gate {
+    background: var(--panel);
+    padding: 32px 26px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Services scrolls this highlight from gate to gate as the section
+       passes through view (see services.astro) — a class toggle rather
+       than a GSAP colour tween, so it needs its own transition to read as
+       a fade instead of an instant snap on every scroll tick. */
+    transition: background-color 0.4s ease;
+  }
+
+  .gate--highlight {
+    background: var(--blue);
+  }
+
+  .gate-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red);
+    transition: color 0.4s ease;
+  }
+
+  .gate--highlight .gate-tag {
+    color: var(--blue-soft);
+  }
+
+  .gate-title {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .gate-body {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-slate-2);
+    transition: color 0.4s ease;
+  }
+
+  .gate--highlight .gate-body {
+    color: var(--blue-soft-2);
+  }
+</style>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / WORK" title="Rooms that are running right now." sub="Six delivered projects, each with the constraint that made it difficult. All handed over with the qualification dossier complete." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:0 32px">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-left:1px solid #E1E3E9;border-right:1px solid #E1E3E9;background:#0B0D14;color:#fff">
+        <div style="min-height:520px;background:#131722"><image-slot id="v2-proj-feature" shape="rect" placeholder="Featured project"></image-slot></div>
+        <div style="padding:60px 48px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF3B2F;margin-bottom:26px">FEATURED · GAZIPUR · 2025</div>
+          <h2 style="margin:0 0 20px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:40px;line-height:1.03;letter-spacing:-.04em">Sterile injectable block, bare shell to signed dossier in fourteen months.</h2>
+          <p style="margin:0 0 34px;font-size:17px;line-height:1.65;color:#B4BCCB">Grade A through D across 1,850 m²: four dedicated air handlers, a WFI loop, dynamic pass boxes at every classified boundary, and continuous environmental monitoring. Passed DGDA and a client-commissioned EU-standard audit on first inspection.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin-bottom:34px">
+            <div style="background:#131722;padding:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:8px">CLASSIFIED AREA</div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700">1,850 m²</div></div>
+            <div style="background:#131722;padding:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:8px">SHELL TO HANDOVER</div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700">14 mo</div></div>
+            <div style="background:#131722;padding:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3B5;margin-bottom:8px">OBSERVATIONS</div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700">0</div></div>
+          </div>
+          <a href="Contact.dc.html" style="align-self:flex-start;padding:15px 28px;background:#1B4DFF;color:#fff;font-size:15px;font-weight:600;border-radius:2px;white-space:nowrap" style-hover="background:#fff;color:#1B4DFF">Discuss a similar project</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:64px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4302A;margin-bottom:34px">02 / SELECTED PROJECTS</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#D8DBE4;border:1px solid #D8DBE4">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+          <div style="background:#F5F6F8">
+            <div style="height:210px;background:#E8EAEF"><image-slot id="{{ p.slot }}" shape="rect" placeholder="Project photo"></image-slot></div>
+            <div style="padding:28px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#1B4DFF;margin-bottom:14px">{{ p.tag }}</div>
+              <h3 style="margin:0 0 12px;font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.15">{{ p.title }}</h3>
+              <p style="margin:0 0 18px;font-size:16px;line-height:1.6;color:#4A5265">{{ p.body }}</p>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;border-top:1px solid #DDE0E8;padding-top:14px">{{ p.meta }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PROJECTS = [
+  ["PHARMA · DHAKA", "Oral solid dosage expansion", "Six ISO 8 granulation and compression rooms added to a live plant. Adjacent production never stopped, which set every sequencing decision on the job.", "920 m² · 2025 · TURNKEY"],
+  ["HEALTHCARE · CHATTOGRAM", "Four modular operating theatres", "Laminar ceiling systems and antibacterial envelopes for a 400-bed private hospital, with redundant air handlers so a service visit never closes a theatre.", "4 THEATRES · 2024 · DESIGN & BUILD"],
+  ["FOOD · NARAYANGANJ", "Chilled packing hall & cold store", "Washdown-rated air handling over a wet line, plus a 600-pallet cold store with redundant plant for a dairy processor running seven days.", "1,400 m² · 2024 · TURNKEY"],
+  ["BIOTECH · SAVAR", "BSL-3 containment laboratory", "Sealed envelope, negative cascade, bag-in/bag-out exhaust filtration, and a room integrity test before a single sample entered the building.", "310 m² · 2023 · DESIGN & VALIDATE"],
+  ["PHARMA · GAZIPUR", "Purified water & clean steam plant", "RO–EDI train feeding a 6 m³/h sanitisable loop, with sample point mapping and a full qualification campaign across sixteen user points.", "6 m³/h · 2023 · UTILITIES"],
+  ["DEVICES · DHAKA EPZ", "Device assembly cleanroom", "ISO 7 assembly and ISO 8 packing with ESD flooring, qualified against ISO 13485 expectations for an export-only manufacturer.", "740 m² · 2022 · TURNKEY"]
+];
+class Component extends DCLogic {
+  renderVals() {
+    return { projects: PROJECTS.map(([tag, title, body, meta], i) => ({ tag, title, body, meta, slot: "v2-proj-" + (i + 1) })) };
+  }
+}
+</script>
+</body>
+</html>

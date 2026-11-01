@@ -1,0 +1,343 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import Kicker from '../components/Kicker.astro';
+import Button from '../components/Button.astro';
+import SpecRow from '../components/SpecRow.astro';
+import { COMPANY } from '../data/nav.js';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Send the brief, even the unfinished version. An engineer replies within one working day."
+  hideCta
+>
+  <PageMast
+    kicker="01 / CONTACT"
+    title="Send the brief, even the unfinished version."
+    sub="An engineer reads it and replies within one working day — usually with the two or three questions that decide the price."
+  />
+
+  <section class="contact">
+    <div class="wrap contact-frame">
+      <div class="form-col">
+        <div class="success-state" id="success-state" hidden>
+          <div class="success-kicker">● ENQUIRY LOGGED</div>
+          <h2 class="success-title">We have it. Reply within one working day.</h2>
+          <p class="success-copy">
+            An engineer reads every enquiry before anyone in sales does. Expect two or three clarifying questions
+            before a number.
+          </p>
+          <Button type="button" variant="outline" id="reset-form">Send another</Button>
+        </div>
+
+        <div id="form-state" data-reveal>
+          <Kicker text="02 / ENQUIRY FORM" tone="light" />
+          <form id="enquiry-form" class="enquiry-form" novalidate>
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label">FULL NAME *</span>
+                <input type="text" name="name" placeholder="Your name" required />
+              </label>
+              <label class="field">
+                <span class="field-label">COMPANY *</span>
+                <input type="text" name="company" placeholder="Organisation" required />
+              </label>
+              <label class="field">
+                <span class="field-label">EMAIL *</span>
+                <input type="email" name="email" placeholder="name@company.com" required />
+              </label>
+              <label class="field">
+                <span class="field-label">PHONE</span>
+                <input type="tel" name="phone" placeholder="+1 (713) 555-0123" />
+              </label>
+            </div>
+            <label class="field field--full">
+              <span class="field-label">SCOPE</span>
+              <select name="scope">
+                <option>Turnkey cleanroom project</option>
+                <option>HVAC design or installation</option>
+                <option>Validation / requalification</option>
+                <option>Process utilities (PW, WFI, steam)</option>
+                <option>Equipment supply only</option>
+                <option>Maintenance agreement</option>
+                <option>Something else</option>
+              </select>
+            </label>
+            <label class="field field--full">
+              <span class="field-label">PROJECT BRIEF *</span>
+              <textarea
+                name="message"
+                rows="6"
+                placeholder="Area, classification target, site location, and timeline if you have them."
+                required></textarea>
+            </label>
+            <div class="submit-row">
+              <Button type="submit" variant="accent">Send enquiry</Button>
+              <span class="form-status" id="form-status"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="info-col" data-reveal-group>
+        <div class="info-block info-block--dark" data-reveal-item>
+          <div class="info-label info-label--dark">{COMPANY.hq.label}</div>
+          <p class="info-address">
+            {COMPANY.hq.address.map((line) => <>{line}<br /></>)}
+          </p>
+          <div class="info-contact info-contact--dark">
+            {COMPANY.hq.phone}<br />
+            {COMPANY.hq.email}
+          </div>
+        </div>
+        <div class="info-block" data-reveal-item>
+          <div class="info-label">{COMPANY.workshop.label}</div>
+          <p class="info-address">
+            {COMPANY.workshop.address.map((line) => <>{line}<br /></>)}
+          </p>
+          <div class="info-contact">
+            {COMPANY.workshop.phone}<br />
+            {COMPANY.workshop.email}
+          </div>
+        </div>
+        <div class="info-block" data-reveal-item>
+          <div class="info-label">HOURS</div>
+          <div class="hours-list">
+            {COMPANY.hours.map((h) => (
+              <SpecRow label={h.label} value={h.value} accent={h.accent} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap } from '../scripts/motion.js';
+
+  const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
+  const formState = document.getElementById('form-state');
+  const successState = document.getElementById('success-state');
+  const statusEl = document.getElementById('form-status');
+  const resetBtn = document.getElementById('reset-form');
+
+  gsap.set(successState, { autoAlpha: 0 });
+
+  function crossfade(hide: HTMLElement | null, show: HTMLElement | null) {
+    if (hide) {
+      gsap.to(hide, {
+        autoAlpha: 0,
+        y: -8,
+        duration: 0.25,
+        ease: 'power1.in',
+        overwrite: true,
+        onComplete: () => (hide.hidden = true),
+      });
+    }
+    if (show) {
+      show.hidden = false;
+      gsap.fromTo(
+        show,
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: hide ? 0.15 : 0, overwrite: true }
+      );
+    }
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const required = ['name', 'company', 'email', 'message'];
+    const missing = required.some((k) => !String(data.get(k) ?? '').trim());
+    if (missing) {
+      if (statusEl) statusEl.textContent = 'REQUIRED FIELDS INCOMPLETE';
+      return;
+    }
+    if (statusEl) statusEl.textContent = '';
+    crossfade(formState, successState);
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    form?.reset();
+    if (statusEl) statusEl.textContent = '';
+    crossfade(successState, formState);
+  });
+</script>
+
+<style>
+  .contact {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .form-col {
+    padding: 56px 44px;
+    display: grid;
+  }
+
+  .success-state,
+  #form-state {
+    grid-area: 1 / 1;
+  }
+
+  .success-state {
+    padding: 60px 0;
+    max-width: 480px;
+  }
+
+  .success-kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--blue);
+    margin-bottom: 24px;
+  }
+
+  .success-title {
+    margin: 0 0 16px;
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3.4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .success-copy {
+    margin: 0 0 30px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+
+  .enquiry-form {
+    margin-top: 26px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .field {
+    display: block;
+  }
+
+  .field--full {
+    margin-bottom: 26px;
+  }
+
+  .field-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 9px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border: 1px solid var(--input-border);
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  .field textarea {
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  .submit-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .form-status {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--red-deep);
+  }
+
+  .info-col {
+    border-left: 1px solid var(--border);
+  }
+
+  .info-block {
+    padding: 44px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-block:last-child {
+    border-bottom: none;
+  }
+
+  .info-block--dark {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .info-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red-deep);
+    margin-bottom: 20px;
+  }
+
+  .info-label--dark {
+    color: var(--red);
+  }
+
+  .info-address {
+    margin: 0 0 20px;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .info-contact {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text-body-2);
+  }
+
+  .info-contact--dark {
+    color: var(--text-slate-2);
+  }
+
+  .hours-list {
+    margin-top: -4px;
+  }
+
+  @media (max-width: 900px) {
+    .contact-frame {
+      grid-template-columns: 1fr;
+    }
+    .form-col {
+      padding: 40px 24px;
+    }
+    .info-col {
+      border-left: none;
+      border-top: 1px solid var(--border);
+    }
+    .field-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,173 @@
+---
+// Article tile for /insights and the "keep reading" rail on a post page.
+// Deliberately not ProductCard: that one is a spec-sheet tile (image,
+// category, name, footnote spec) built for equipment. An article has no
+// spec — it has a category, a publish date, a read time, and a person
+// who wrote it — so this reshapes the same photo-card idea around that:
+// the category rides on the photo as a tag rather than sitting above the
+// title as plain text, and the footer carries the author instead of a
+// spec line.
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  title: string;
+  href: string;
+  photo?: string;
+  category: string;
+  date: string;
+  readTime: string;
+  excerpt?: string;
+  authorName?: string;
+  authorPhoto?: string;
+  class?: string;
+}
+
+const {
+  title,
+  href,
+  photo,
+  category,
+  date,
+  readTime,
+  excerpt,
+  authorName,
+  authorPhoto,
+  class: className,
+} = Astro.props;
+---
+
+<a href={href} class:list={['icard', className]} data-reveal-item>
+  <div class="icard-media">
+    <ImagePlaceholder label={title} photo={photo} ratio="16/10" />
+    <span class="icard-tag">{category}</span>
+  </div>
+  <div class="icard-body">
+    <div class="icard-meta">{date} · {readTime}</div>
+    <h3 class="icard-title">{title}</h3>
+    {excerpt && <p class="icard-excerpt">{excerpt}</p>}
+    <div class="icard-foot">
+      {authorName ? (
+        <span class="icard-author">
+          {authorPhoto && (
+            <span class="icard-author-photo"><ImagePlaceholder label={authorName} photo={authorPhoto} /></span>
+          )}
+          <span class="icard-author-name">{authorName}</span>
+        </span>
+      ) : <span />}
+      <span class="icard-arrow">READ →</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .icard {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--ink);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    position: relative;
+  }
+
+  .icard:hover {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 14px 30px rgba(11, 13, 20, 0.08);
+    transform: translateY(-3px);
+    z-index: 1;
+  }
+
+  .icard-media {
+    position: relative;
+  }
+
+  .icard-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(11, 13, 20, 0.82);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+    padding: 6px 10px;
+  }
+
+  .icard-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 24px 20px;
+  }
+
+  .icard-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .icard-title {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .icard-excerpt {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-body-2);
+    flex: 1;
+  }
+
+  .icard-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #DDE0E8;
+    padding-top: 14px;
+    margin-top: auto;
+  }
+
+  .icard-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .icard-author-photo {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .icard-author-name {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .icard-arrow {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+    transition: transform 0.3s ease;
+  }
+
+  .icard:hover .icard-arrow {
+    transform: translateX(4px);
+  }
+</style>

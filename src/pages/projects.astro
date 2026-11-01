@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import Kicker from '../components/Kicker.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import Button from '../components/Button.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { FEATURED_PROJECT, PROJECTS } from '../data/projects.js';
+---
+
+<BaseLayout
+  title="Work"
+  description="Six delivered projects, each with the constraint that made it difficult. All handed over with the qualification dossier complete."
+>
+  <PageMast
+    kicker="01 / WORK"
+    title="Rooms that are running right now."
+    sub="Six delivered projects, each with the constraint that made it difficult. All handed over with the qualification dossier complete."
+  />
+
+  <section class="feature">
+    <div class="wrap feature-frame">
+      <div class="feature-img" data-reveal>
+        <ImagePlaceholder label="Featured project" photo={FEATURED_PROJECT.photo} />
+      </div>
+      <div class="feature-copy" data-reveal-group>
+        <div class="feature-tag" data-reveal-item>{FEATURED_PROJECT.tag}</div>
+        <h2 class="feature-title" data-reveal-item>{FEATURED_PROJECT.title}</h2>
+        <p class="feature-body" data-reveal-item>{FEATURED_PROJECT.body}</p>
+        <div class="feature-stats" data-reveal-item>
+          {FEATURED_PROJECT.stats.map((s) => (
+            <div class="feature-stat">
+              <div class="feature-stat-label">{s.label}</div>
+              <div class="feature-stat-value" data-count>{s.value}</div>
+            </div>
+          ))}
+        </div>
+        <Button href="/contact" variant="primary-on-dark">Discuss a similar project</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-section">
+    <div class="wrap">
+      <Kicker text="02 / SELECTED PROJECTS" tone="light" data-reveal />
+      <div class="projects-grid" data-reveal-group>
+        {PROJECTS.map((p) => (
+          <ProjectCard tag={p.tag} title={p.title} body={p.body} meta={p.meta} photo={p.photo} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .feature {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .feature-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .feature-img {
+    min-height: 420px;
+    background: var(--panel);
+  }
+
+  .feature-copy {
+    padding: 60px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .feature-tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--red);
+    margin-bottom: 26px;
+  }
+
+  .feature-title {
+    margin: 0 0 20px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.6vw, 40px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .feature-body {
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-slate-2);
+  }
+
+  .feature-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    margin-bottom: 34px;
+  }
+
+  .feature-stat {
+    background: var(--panel);
+    padding: 22px;
+  }
+
+  .feature-stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-slate);
+    margin-bottom: 8px;
+  }
+
+  .feature-stat-value {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .grid-section {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 84px;
+  }
+
+  .projects-grid {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+  }
+
+  @media (max-width: 900px) {
+    .feature-frame {
+      grid-template-columns: 1fr;
+    }
+    .projects-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

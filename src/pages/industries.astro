@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageMast from '../components/PageMast.astro';
+import Kicker from '../components/Kicker.astro';
+import SectorRow from '../components/SectorRow.astro';
+import DarkPanel from '../components/DarkPanel.astro';
+import { SECTORS, ALSO_SERVED } from '../data/sectors.js';
+---
+
+<BaseLayout
+  title="Sectors"
+  description="Pharmaceutical manufacturing, hospitals, food processing, and biotech labs — we design to the inspection you will actually sit through."
+>
+  <PageMast
+    kicker="01 / SECTORS"
+    title="Different regulators. Different failure modes."
+    sub="A dairy packing hall and a sterile filling suite both need clean air, and almost nothing else about them is the same. We design to the inspection you will actually sit through."
+  />
+
+  <section class="sectors">
+    <div class="wrap sectors-frame" data-reveal-group>
+      {SECTORS.map((s) => (
+        <SectorRow no={s.no} name={s.name} body={s.body} cls={s.cls} reg={s.reg} risk={s.risk} icon={s.icon} photo={s.photo} />
+      ))}
+    </div>
+  </section>
+
+  <section class="also-served">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="06 / ALSO SERVED" tone="dark" />
+        <h2 class="also-title">Smaller scopes, same method.</h2>
+      </div>
+      <div class="also-grid" data-reveal-group>
+        {ALSO_SERVED.map((a) => (
+          <DarkPanel title={a.title} body={a.body} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sectors {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sectors-frame {
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .also-served {
+    border-bottom: 1px solid var(--border);
+    background: var(--ink);
+    color: #fff;
+    padding: 72px 0 84px;
+  }
+
+  .also-title {
+    margin: 24px 0 42px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.8vw, 42px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .also-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .also-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .also-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

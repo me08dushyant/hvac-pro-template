@@ -1,0 +1,72 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  tag: string;
+  title: string;
+  body: string;
+  meta: string;
+  photo?: string;
+  class?: string;
+}
+
+const { tag, title, body, meta, photo, class: className } = Astro.props;
+---
+
+<div class:list={['proj-card', className]} data-reveal-item>
+  <div class="proj-card-img">
+    <ImagePlaceholder label="Project photo" photo={photo} />
+  </div>
+  <div class="proj-card-body">
+    <div class="proj-card-tag">{tag}</div>
+    <h3 class="proj-card-title">{title}</h3>
+    <p class="proj-card-desc">{body}</p>
+    <div class="proj-card-meta">{meta}</div>
+  </div>
+</div>
+
+<style>
+  .proj-card {
+    background: var(--bg);
+  }
+
+  .proj-card-img {
+    height: 210px;
+    background: var(--surface);
+  }
+
+  .proj-card-body {
+    padding: 28px;
+  }
+
+  .proj-card-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+    margin-bottom: 14px;
+  }
+
+  .proj-card-title {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  .proj-card-desc {
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body-2);
+  }
+
+  .proj-card-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid #DDE0E8;
+    padding-top: 14px;
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  icon: string;
+  title: string;
+  body: string;
+  class?: string;
+}
+
+const { icon, title, body, class: className } = Astro.props;
+---
+
+<div class:list={['cert', className]} data-reveal-item>
+  <Icon name={icon} class="cert-icon" />
+  <h3 class="cert-title">{title}</h3>
+  <p class="cert-body">{body}</p>
+</div>
+
+<style>
+  .cert {
+    background: var(--bg);
+    padding: 30px;
+  }
+
+  .cert-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--blue);
+    margin-bottom: 22px;
+  }
+
+  .cert-title {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .cert-body {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-body-2);
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+// Dark card on a black section — About's "three commitments" and
+// Industries' "also served" grid both use this.
+interface Props {
+  no?: string;
+  title: string;
+  body: string;
+  class?: string;
+}
+
+const { no, title, body, class: className } = Astro.props;
+---
+
+<div class:list={['panel', className]} data-reveal-item>
+  {no && <div class="panel-no">{no}</div>}
+  <h3 class="panel-title">{title}</h3>
+  <p class="panel-body">{body}</p>
+</div>
+
+<style>
+  .panel {
+    background: var(--panel);
+    padding: 32px 26px;
+  }
+
+  .panel-no {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-slate);
+    margin-bottom: 22px;
+  }
+
+  .panel-title {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+
+  .panel-body {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-slate-2);
+  }
+</style>

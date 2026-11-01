@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #F5F6F8; }
+a { color: #0B0D14; text-decoration: none; }
+a:hover { color: #1B4DFF; }
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',sans-serif;color:#0B0D14;background:#F5F6F8">
+  <dc-import name="HeaderV2" hint-size="100%,105px"></dc-import>
+  <dc-import name="MastV2" kicker="01 / SECTORS" title="Different regulators. Different failure modes." sub="A dairy packing hall and a sterile filling suite both need clean air, and almost nothing else about them is the same. We design to the inspection you will actually sit through." hint-size="100%,280px"></dc-import>
+
+  <section style="border-bottom:1px solid #E1E3E9">
+    <div style="max-width:1320px;margin:0 auto;padding:0 32px">
+      <div style="border-left:1px solid #E1E3E9;border-right:1px solid #E1E3E9">
+        <sc-for list="{{ sectors }}" as="s" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr);border-bottom:1px solid #E1E3E9">
+            <div style="min-height:340px;background:#E8EAEF"><image-slot id="{{ s.slot }}" shape="rect" placeholder="{{ s.name }}"></image-slot></div>
+            <div style="padding:44px 40px;border-left:1px solid #E1E3E9">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C4302A;margin-bottom:20px">{{ s.no }}</div>
+              <h2 style="margin:0 0 16px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:34px;line-height:1.05;letter-spacing:-.035em">{{ s.name }}</h2>
+              <p style="margin:0 0 26px;font-size:17px;line-height:1.6;color:#3A4152;max-width:620px">{{ s.body }}</p>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;border-top:1px solid #E1E3E9;padding-top:20px">
+                <div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;margin-bottom:7px">TYPICAL CLASS</div><div style="font-size:16px;font-weight:600">{{ s.cls }}</div></div>
+                <div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;margin-bottom:7px">INSPECTED BY</div><div style="font-size:16px;font-weight:600">{{ s.reg }}</div></div>
+                <div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6272;margin-bottom:7px">CRITICAL RISK</div><div style="font-size:16px;font-weight:600">{{ s.risk }}</div></div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid #E1E3E9;background:#0B0D14;color:#fff">
+    <div style="max-width:1320px;margin:0 auto;padding:72px 32px 84px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF3B2F;margin-bottom:24px">06 / ALSO SERVED</div>
+      <h2 style="margin:0 0 42px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:42px;line-height:1.03;letter-spacing:-.04em">Smaller scopes, same method.</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px">
+        <div style="background:#131722;padding:32px 26px"><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em">Cosmetics &amp; personal care</h3><p style="margin:0;font-size:15px;line-height:1.6;color:#B4BCCB">ISO 8 filling and packing halls with humidity control for emulsions and powders.</p></div>
+        <div style="background:#131722;padding:32px 26px"><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em">Medical devices</h3><p style="margin:0;font-size:15px;line-height:1.6;color:#B4BCCB">Assembly and packaging cleanrooms qualified against ISO 13485 expectations.</p></div>
+        <div style="background:#131722;padding:32px 26px"><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em">Electronics &amp; optics</h3><p style="margin:0;font-size:15px;line-height:1.6;color:#B4BCCB">ESD-safe low-particulate rooms with tight temperature stability.</p></div>
+        <div style="background:#131722;padding:32px 26px"><h3 style="margin:0 0 10px;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em">Agro &amp; veterinary</h3><p style="margin:0;font-size:15px;line-height:1.6;color:#B4BCCB">Feed premix, vaccine, and veterinary formulation suites with containment.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="FooterV2" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTORS = [
+  ["02", "Pharmaceutical manufacturing",
+   "Oral solid dosage, liquids, and sterile injectables. Dedicated air handlers per production zone, cascade that survives shift change, and a qualification pack written for the inspector rather than the file.",
+   "ISO 5 – ISO 8", "DGDA · WHO-GMP", "Cross-contamination"],
+  ["03", "Hospitals & healthcare",
+   "Modular operating theatres, intensive care, isolation rooms, and central sterile supply. Laminar ceilings over the table, redundant plant, and monitoring that alarms before a nurse notices.",
+   "ISO 5 – ISO 7", "Hospital accreditation", "Surgical site infection"],
+  ["04", "Food & beverage processing",
+   "Hygienic production halls, chilled packing rooms, and washdown-rated air handling for dairy, confectionery, and ready-meal plants where the line runs wet and the ceiling gets hosed.",
+   "ISO 8 / hygienic", "HACCP · BRC", "Microbial spoilage"],
+  ["05", "Biotech & diagnostics labs",
+   "BSL-2 and BSL-3 containment, PCR suites, and tissue culture rooms. Here the cascade runs the other way — negative, sealed, and proven with a room integrity test before anyone works in it.",
+   "BSL-2 / BSL-3", "Institutional biosafety", "Containment breach"]
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      sectors: SECTORS.map(([no, name, body, cls, reg, risk], i) => ({
+        no, name, body, cls, reg, risk, slot: "v2-ind-" + (i + 1)
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

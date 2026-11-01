@@ -1,0 +1,107 @@
+---
+// Kicker + big Bricolage Grotesque headline, the pattern that opens almost
+// every section. Pass an `aside` slot for the trailing paragraph/link some
+// sections pair with it.
+import Kicker from './Kicker.astro';
+
+interface Props {
+  kicker: string;
+  tone?: 'light' | 'dark' | 'blue';
+  as?: 'h1' | 'h2' | 'h3';
+  size?: 'xl' | 'lg' | 'md';
+  maxWidth?: string;
+  align?: 'end' | 'start';
+  gap?: string;
+  class?: string;
+}
+
+const {
+  kicker,
+  tone = 'light',
+  as = 'h2',
+  size = 'xl',
+  maxWidth,
+  align = 'end',
+  gap,
+  class: className,
+} = Astro.props;
+
+const Tag = as;
+const hasAside = Astro.slots.has('aside');
+---
+
+<div
+  class:list={['sh', `sh--${align}`, hasAside && 'sh--split', className]}
+  style={gap ? `margin-bottom:${gap}` : undefined}
+  data-reveal
+>
+  <div class="sh-main">
+    <Kicker text={kicker} tone={tone} />
+    <Tag class:list={['sh-title', `sh-title--${size}`]} style={maxWidth ? `max-width:${maxWidth}` : undefined}>
+      <slot />
+    </Tag>
+  </div>
+  {hasAside && (
+    <div class="sh-aside">
+      <slot name="aside" />
+    </div>
+  )}
+</div>
+
+<style>
+  .sh {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .sh--split {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .sh--split.sh--end {
+    align-items: flex-end;
+  }
+
+  .sh--split.sh--start {
+    align-items: flex-start;
+  }
+
+  .sh-main {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  .sh-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.04;
+    color: var(--ink);
+  }
+
+  .sh-title--xl {
+    font-size: clamp(28px, 4.4vw, 46px);
+  }
+
+  .sh-title--lg {
+    font-size: clamp(26px, 3.6vw, 40px);
+  }
+
+  .sh-title--md {
+    font-size: clamp(22px, 2.8vw, 30px);
+  }
+
+  .sh-aside {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-slate);
+    max-width: 360px;
+  }
+</style>

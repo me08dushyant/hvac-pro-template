@@ -1,0 +1,66 @@
+---
+// Mono label over a big Bricolage Grotesque number. Used for hero stats,
+// the pressure-cascade readout, and project figures.
+interface Props {
+  label: string;
+  value: string;
+  tone?: 'light' | 'dark';
+  size?: 'md' | 'lg';
+  panel?: boolean;
+  class?: string;
+}
+
+const { label, value, tone = 'light', size = 'md', panel = false, class: className } = Astro.props;
+---
+
+<div class:list={['stat', panel && 'stat--panel', className]}>
+  <div class:list={['stat-label', `stat-label--${tone}`]}>{label}</div>
+  <div class:list={['stat-value', `stat-value--${size}`, `stat-value--${tone}`]} data-count>{value}</div>
+</div>
+
+<style>
+  .stat {
+    padding: 20px 0;
+  }
+
+  .stat--panel {
+    background: var(--panel);
+    padding: 22px;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .stat-label--light {
+    color: var(--text-muted);
+  }
+
+  .stat-label--dark {
+    color: var(--text-slate);
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .stat-value--md {
+    font-size: 26px;
+  }
+
+  .stat-value--lg {
+    font-size: 32px;
+  }
+
+  .stat-value--light {
+    color: var(--ink);
+  }
+
+  .stat-value--dark {
+    color: #fff;
+  }
+</style>

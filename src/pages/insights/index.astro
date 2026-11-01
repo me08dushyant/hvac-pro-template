@@ -1,0 +1,303 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageMast from '../../components/PageMast.astro';
+import Kicker from '../../components/Kicker.astro';
+import Button from '../../components/Button.astro';
+import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import { CATEGORIES, INSIGHTS, formatInsightDate } from '../../data/insights.js';
+
+// Newest post leads as a proper feature band (mirrors Work's FEATURED_PROJECT
+// treatment) instead of just being the first tile in an otherwise flat grid.
+const [featured, ...rest] = INSIGHTS;
+---
+
+<BaseLayout
+  title="Insights"
+  description="Field notes on cleanroom design, HVAC commissioning, validation, and maintenance — written by the engineers who run the jobs, not marketing copy."
+>
+  <PageMast
+    kicker="01 / INSIGHTS"
+    title="Field notes, not sales copy."
+    sub="Written by the engineers who design, commission, and maintain these systems — the numbers and the mistakes we'd want to know about before they're ours to fix."
+  />
+
+  <section class="feature">
+    <div class="wrap feature-frame">
+      <div class="feature-img" data-reveal>
+        <ImagePlaceholder label={featured.title} photo={featured.photo} />
+      </div>
+      <div class="feature-copy" data-reveal-group>
+        <Kicker text={`LATEST · ${featured.category}`} tone="dark" data-reveal-item />
+        <h2 class="feature-title" data-reveal-item>{featured.title}</h2>
+        <p class="feature-body" data-reveal-item>{featured.excerpt}</p>
+        <div class="feature-stats" data-reveal-item>
+          <div class="feature-stat">
+            <div class="feature-stat-label">PUBLISHED</div>
+            <div class="feature-stat-value">{formatInsightDate(featured.date)}</div>
+          </div>
+          <div class="feature-stat">
+            <div class="feature-stat-label">READ TIME</div>
+            <div class="feature-stat-value">{featured.readTime}</div>
+          </div>
+          <div class="feature-stat">
+            <div class="feature-stat-label">AUTHOR</div>
+            <div class="feature-stat-value feature-stat-value--sm">{featured.author.name}</div>
+          </div>
+        </div>
+        <Button href={`/insights/${featured.slug}`} variant="primary-on-dark">Read the full note</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="archive">
+    <div class="wrap">
+      <Kicker text="02 / MORE FIELD NOTES" tone="light" data-reveal />
+      <div class="filter-row">
+        <div class="filters" role="tablist" data-reveal-group>
+          {CATEGORIES.map((cat) => (
+            <button
+              type="button"
+              class="filter-btn"
+              data-cat={cat}
+              data-reveal-item
+              aria-selected={cat === 'ALL' ? 'true' : 'false'}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <span class="count" id="insight-count">{String(rest.length).padStart(2, '0')} ARTICLES</span>
+      </div>
+
+      <div class="insight-grid" data-reveal-group>
+        {rest.map((p) => (
+          <div class="insight-cell" data-post-cat={p.category}>
+            <InsightCard
+              title={p.title}
+              href={`/insights/${p.slug}`}
+              photo={p.photo}
+              category={p.category}
+              date={formatInsightDate(p.date)}
+              readTime={p.readTime}
+              excerpt={p.excerpt}
+              authorName={p.author.name}
+              authorPhoto={p.author.photo}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap, ScrollTrigger } from '../../scripts/motion.js';
+
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-btn'));
+  const cells = Array.from(document.querySelectorAll<HTMLElement>('[data-post-cat]'));
+  const countEl = document.getElementById('insight-count');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      buttons.forEach((b) => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+
+      const toShow: HTMLElement[] = [];
+      const toHide: HTMLElement[] = [];
+      let visible = 0;
+
+      cells.forEach((cell) => {
+        const match = cat === 'ALL' || cell.dataset.postCat === cat;
+        if (match) visible += 1;
+        if (match && cell.hidden) toShow.push(cell);
+        else if (!match && !cell.hidden) toHide.push(cell);
+      });
+
+      if (countEl) countEl.textContent = String(visible).padStart(2, '0') + ' ARTICLES';
+
+      const outCards = toHide.map((c) => c.querySelector('.icard')).filter(Boolean) as HTMLElement[];
+      const inCards = toShow.map((c) => c.querySelector('.icard')).filter(Boolean) as HTMLElement[];
+
+      // Filtering changes the grid's height — keep the rest of the page's
+      // ScrollTriggers (footer reveal, etc.) in sync as that height settles.
+      if (outCards.length) {
+        gsap.to(outCards, {
+          autoAlpha: 0,
+          scale: 0.96,
+          duration: 0.2,
+          ease: 'power1.in',
+          overwrite: true,
+          onComplete: () => {
+            toHide.forEach((c) => (c.hidden = true));
+            ScrollTrigger.refresh();
+          },
+        });
+      }
+      if (inCards.length) {
+        toShow.forEach((c) => (c.hidden = false));
+        gsap.fromTo(
+          inCards,
+          { autoAlpha: 0, scale: 0.96 },
+          {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: 'power2.out',
+            stagger: 0.025,
+            delay: outCards.length ? 0.12 : 0,
+            overwrite: true,
+          }
+        );
+        ScrollTrigger.refresh();
+      }
+    });
+  });
+</script>
+
+<style>
+  .feature {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .feature-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .feature-img {
+    min-height: 420px;
+    background: var(--panel);
+  }
+
+  .feature-copy {
+    padding: 60px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .feature-title {
+    margin: 26px 0 20px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.6vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .feature-body {
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-slate-2);
+  }
+
+  .feature-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    margin-bottom: 34px;
+  }
+
+  .feature-stat {
+    background: var(--panel);
+    padding: 18px 20px;
+  }
+
+  .feature-stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-slate);
+    margin-bottom: 8px;
+  }
+
+  .feature-stat-value {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .feature-stat-value--sm {
+    font-size: 16px;
+  }
+
+  .archive {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 84px;
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    margin: 24px 0 34px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 22px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .filter-btn {
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    background: #E7E9EF;
+    color: var(--text-body);
+  }
+
+  .filter-btn[aria-selected='true'] {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+  }
+
+  .insight-cell {
+    display: contents;
+  }
+
+  .insight-cell[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .feature-frame {
+      grid-template-columns: 1fr;
+    }
+    .insight-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .insight-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

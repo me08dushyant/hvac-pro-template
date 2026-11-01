@@ -1,0 +1,167 @@
+/* ==========================================================================
+   HVACPro design tokens
+   A single-contract engineering firm for classified space. Editorial,
+   technical, mono-labelled — see hvac-company-website-pages/project for
+   the source prototypes this theme implements.
+   ========================================================================== */
+
+:root {
+  /* Ink & surfaces */
+  --ink: #0B0D14;
+  --panel: #131722;
+  --panel-line: #1C202C;
+  --panel-line-2: #2A2F3D;
+  --bg: #F5F6F8;
+  --bg-alt: #EDEFF4;
+  --surface: #E8EAEF;
+  --grid-line: #D8DBE4;
+  --border: #E1E3E9;
+  --border-strong: #0B0D14;
+  --input-border: #C9CDD8;
+
+  /* Text */
+  --text: #0B0D14;
+  --text-body: #3A4152;
+  --text-body-2: #4A5265;
+  --text-muted: #5A6272;
+  --text-slate: #9AA3B5;
+  --text-slate-2: #B4BCCB;
+  --text-ticker: #8A93A6;
+
+  /* Accent */
+  --blue: #1B4DFF;
+  --blue-soft: #BFCEFF;
+  --blue-soft-2: #DCE4FF;
+  --red: #FF3B2F;
+  --red-deep: #C4302A;
+
+  /* Type */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --wrap: 1320px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--blue);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9AA1B0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-inline: 32px;
+}
+
+@media (max-width: 720px) {
+  .wrap {
+    padding-inline: 20px;
+  }
+}
+
+/* GSAP reveal-on-scroll hooks (see src/scripts/motion.js). Only hidden once
+   JS has confirmed it will animate these back in — a no-JS visit keeps
+   everything visible. */
+html.js-motion [data-reveal],
+html.js-motion [data-reveal-item],
+html.js-motion [data-reveal-group] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-motion [data-reveal],
+  html.js-motion [data-reveal-item],
+  html.js-motion [data-reveal-group] {
+    opacity: 1;
+  }
+}
+
+/* Per-letter "swap up" hover — see initLinkFlip() in motion.js. Each link
+   wraps a fixed-height, overflow-hidden well holding two identical text
+   rows; JS splits both into characters and staggers them upward together
+   on hover/focus so the duplicate row rides in from below as the original
+   exits above. Purely structural here — the hover/focus color is set by
+   whichever component uses it (nav, footer, ...). Unscoped (not a
+   component style) because the `.char` spans are injected at runtime by
+   SplitText and wouldn't carry any one component's scoped-style hash. */
+.link-flip {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  height: 1.4em;
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+.link-flip-row {
+  display: block;
+}
+
+.link-flip-row--bottom {
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+.link-flip .char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

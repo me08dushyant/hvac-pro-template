@@ -1,0 +1,54 @@
+---
+// Label/value split row — product specification tables and the Contact
+// hours list both use it.
+interface Props {
+  label: string;
+  value: string;
+  accent?: boolean;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { label, value, accent = false, tone = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['spec', `spec--${tone}`, className]}>
+  <span class="spec-label">{label}</span>
+  <span class:list={['spec-value', accent && 'spec-value--accent']}>{value}</span>
+</div>
+
+<style>
+  .spec {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 16px;
+  }
+
+  .spec--dark {
+    border-bottom-color: var(--panel-line-2);
+  }
+
+  .spec-label {
+    color: var(--text-body-2);
+  }
+
+  .spec--dark .spec-label {
+    color: var(--text-slate-2);
+  }
+
+  .spec-value {
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .spec--dark .spec-value {
+    color: #fff;
+  }
+
+  .spec-value--accent {
+    color: var(--blue);
+  }
+</style>

@@ -1,0 +1,235 @@
+---
+// `hideCta` drops the "Send the brief" band — used on the Contact page
+// itself, where that headline and its "Request a quote" button (which
+// only points back to /contact) would just repeat the page above it.
+interface Props {
+  hideCta?: boolean;
+}
+
+import Button from './Button.astro';
+import { COMPANY, FOOTER_SCOPE_LINKS, FOOTER_FIRM_LINKS } from '../data/nav.js';
+
+const { hideCta = false } = Astro.props;
+const year = new Date().getFullYear();
+const phoneHref = `tel:${COMPANY.hq.phone.replace(/[^\d+]/g, '')}`;
+---
+
+{!hideCta && (
+  <section class="cta-band">
+    <div class="wrap cta-row" data-reveal-group>
+      <div data-reveal-item>
+        <div class="cta-kicker">NEXT STEP</div>
+        <h2 class="cta-title">Send the brief.<br />Even the rough one.</h2>
+      </div>
+      <div data-reveal-item>
+        <p class="cta-copy">
+          An engineer reads it and replies within one working day — usually with the two or three questions that
+          decide the price.
+        </p>
+        <div class="cta-actions">
+          <Button href="/contact" variant="invert">Request a quote</Button>
+          <Button href={phoneHref} variant="outline-invert">{COMPANY.hq.phone}</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-brand">{COMPANY.name}</div>
+      <p class="footer-tagline">{COMPANY.tagline}</p>
+    </div>
+    <div>
+      <div class="footer-heading">SCOPE</div>
+      <div class="footer-links">
+        {FOOTER_SCOPE_LINKS.map((l) => (
+          <a href={l.href} class="footer-link">
+            <span class="link-flip" aria-hidden="true">
+              <span class="link-flip-row link-flip-row--top">{l.label}</span>
+              <span class="link-flip-row link-flip-row--bottom">{l.label}</span>
+            </span>
+            <span class="sr-only">{l.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">FIRM</div>
+      <div class="footer-links">
+        {FOOTER_FIRM_LINKS.map((l) => (
+          <a href={l.href} class="footer-link">
+            <span class="link-flip" aria-hidden="true">
+              <span class="link-flip-row link-flip-row--top">{l.label}</span>
+              <span class="link-flip-row link-flip-row--bottom">{l.label}</span>
+            </span>
+            <span class="sr-only">{l.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">CONTACT</div>
+      <div class="footer-contact">
+        {COMPANY.hq.address.map((line) => <span>{line}<br /></span>)}
+        {COMPANY.hq.phone}<br />
+        {COMPANY.hq.email}
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© {year} {COMPANY.name.toUpperCase()}</span>
+      <span>{COMPANY.regions}</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  import { initLinkFlip } from '../scripts/motion.js';
+
+  // Per-letter "swap up" hover on the SCOPE/FIRM link columns (see
+  // initLinkFlip in motion.js — shared with the header nav links).
+  initLinkFlip('.footer-link');
+</script>
+
+<style>
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .cta-band {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .cta-row {
+    padding: 88px 0 96px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: end;
+  }
+
+  .cta-kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--blue-soft);
+    margin-bottom: 24px;
+  }
+
+  .cta-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(34px, 6vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+
+  .cta-copy {
+    margin: 0 0 28px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--blue-soft-2);
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .site-footer {
+    background: var(--ink);
+    color: var(--text-slate);
+  }
+
+  .footer-grid {
+    padding: 64px 0 28px;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .footer-brand {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .footer-tagline {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 300px;
+  }
+
+  .footer-heading {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-slate);
+    margin-bottom: 18px;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 15px;
+  }
+
+  .footer-links a {
+    color: var(--text-slate-2);
+  }
+
+  .footer-links a:hover {
+    color: #fff;
+  }
+
+  .footer-link .link-flip-row--bottom {
+    color: #fff;
+  }
+
+  .footer-contact {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text-slate-2);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--panel-line);
+    padding-top: 22px;
+    padding-bottom: 40px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .cta-row {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 36px;
+      padding: 56px 24px 64px;
+    }
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      padding: 48px 24px 24px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

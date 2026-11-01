@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
+import Kicker from '../../components/Kicker.astro';
+import Button from '../../components/Button.astro';
+import SpecRow from '../../components/SpecRow.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import {
+  PRODUCTS,
+  getProduct,
+  PRODUCT_DETAILS,
+  genericFacts,
+  GENERIC_SCOPE,
+} from '../../data/products.js';
+
+export function getStaticPaths() {
+  return PRODUCTS.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const product = getProduct(slug);
+if (!product) {
+  return Astro.redirect('/products');
+}
+
+const bespoke = PRODUCT_DETAILS[slug];
+const facts = bespoke?.facts ?? genericFacts(product);
+const specs = bespoke?.specs ?? [
+  { label: 'Category', value: product.cat },
+  { label: 'Specification', value: product.spec },
+  { label: 'Compliance', value: 'FDA cGMP · EU Annex 1 · ISO 14644' },
+];
+const scope = bespoke?.scope ?? GENERIC_SCOPE;
+const optional = bespoke?.optional ??
+  'Environmental monitoring, controls integration, and annual requalification under a maintenance agreement.';
+const intro = bespoke?.intro ?? product.desc;
+const eyebrow = bespoke?.eyebrow ?? `${product.cat} · EQUIPMENT`;
+
+const relatedSlugs = bespoke?.related ?? PRODUCTS.filter((p) => p.cat === product.cat && p.slug !== product.slug).slice(0, 4).map((p) => p.slug);
+const related = relatedSlugs.map((s) => getProduct(s)).filter(Boolean).slice(0, 4);
+---
+
+<BaseLayout title={product.name} description={intro}>
+  <section class="detail">
+    <div class="wrap">
+      <div class="crumbs">
+        <a href="/">HOME</a> / <a href="/products">EQUIPMENT</a> / <span class="crumb-current">{product.name.toUpperCase()}</span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-copy" data-reveal-group>
+          <Kicker text={eyebrow} tone="light" data-reveal-item />
+          <h1 class="detail-title" data-reveal-item>{product.name}</h1>
+          <p class="detail-intro" data-reveal-item>{intro}</p>
+          <div class="fact-grid" data-reveal-item>
+            {facts.map((f) => (
+              <div class="fact">
+                <div class="fact-label">{f.label}</div>
+                <div class="fact-value">{f.value}</div>
+              </div>
+            ))}
+          </div>
+          <div class="detail-actions" data-reveal-item>
+            <Button href="/contact" variant="primary">Request a quote</Button>
+            <Button href="/contact" variant="outline">Download spec sheet</Button>
+          </div>
+        </div>
+        <div class="detail-visual" data-reveal>
+          <ImagePlaceholder label={`${product.name} — installed view`} photo={product.photo} />
+        </div>
+      </div>
+
+      <div class="detail-thumbs" data-reveal-group>
+        {(bespoke?.thumbs ?? [1, 2, 3, 4].map(() => ({ label: 'Detail view', photo: undefined }))).map((t) => (
+          <div class="thumb" data-reveal-item><ImagePlaceholder label={t.label} photo={t.photo} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="specs">
+    <div class="wrap specs-grid">
+      <div data-reveal>
+        <Kicker text="02 / SPECIFICATION" tone="light" />
+        <div class="spec-list">
+          {specs.map((s) => (
+            <SpecRow label={s.label} value={s.value} />
+          ))}
+        </div>
+      </div>
+      <div data-reveal>
+        <Kicker text="03 / SCOPE OF SUPPLY" tone="light" />
+        <div class="scope-list">
+          {scope.map((line) => (
+            <div class="scope-line">{line}</div>
+          ))}
+        </div>
+        <div class="optional-box">
+          <div class="optional-label">OPTIONAL</div>
+          <p class="optional-copy">{optional}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="related">
+      <div class="wrap">
+        <div data-reveal>
+          <Kicker text="04 / QUOTED WITH IT" tone="light" />
+          <h2 class="related-title">Rarely bought alone.</h2>
+        </div>
+        <div class="related-grid" data-reveal-group>
+          {related.map((p) => (
+            <ProductCard
+              name={p.name}
+              href={`/products/${p.slug}`}
+              imageLabel={p.name}
+              imageHeight="120px"
+              photo={p.photo}
+              footnote={p.spec}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .detail {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .crumbs {
+    padding: 22px 32px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .crumbs a {
+    color: var(--text-muted);
+  }
+
+  .crumb-current {
+    color: var(--ink);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .detail-copy {
+    padding: 56px 40px 48px;
+  }
+
+  .detail-title {
+    margin: 26px 0 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 5vw, 56px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+
+  .detail-intro {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+
+  .fact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+    margin: 34px 0;
+  }
+
+  .fact {
+    background: var(--bg);
+    padding: 18px 20px;
+  }
+
+  .fact-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+  }
+
+  .fact-value {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .detail-visual {
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    min-height: 420px;
+  }
+
+  .detail-thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--border);
+  }
+
+  .thumb {
+    height: 130px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .thumb:last-child {
+    border-right: none;
+  }
+
+  .specs {
+    border-bottom: 1px solid var(--border);
+    padding: 72px 0 84px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px;
+  }
+
+  .spec-list,
+  .scope-list {
+    border-top: 1px solid var(--border-strong);
+    margin-top: 24px;
+  }
+
+  .scope-line {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .optional-box {
+    margin-top: 28px;
+    background: var(--ink);
+    color: #fff;
+    padding: 28px;
+  }
+
+  .optional-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  .optional-copy {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-slate-2);
+  }
+
+  .related {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+    padding: 72px 0 84px;
+  }
+
+  .related-title {
+    margin: 24px 0 40px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.6vw, 40px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+  }
+
+  @media (max-width: 900px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+    .detail-visual {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      min-height: 280px;
+    }
+    .detail-thumbs {
+      grid-template-columns: 1fr 1fr;
+    }
+    .specs-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .related-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .detail-thumbs {
+      grid-template-columns: 1fr;
+    }
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

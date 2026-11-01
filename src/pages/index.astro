@@ -1,0 +1,654 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Kicker from '../components/Kicker.astro';
+import Button from '../components/Button.astro';
+import StatTile from '../components/StatTile.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ListRow from '../components/ListRow.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { ZONES } from '../data/zones.js';
+import { SCOPES } from '../data/scopes.js';
+import { FEATURED_PRODUCTS, HERO_PHOTO } from '../data/products.js';
+import { QUOTES } from '../data/quotes.js';
+---
+
+<BaseLayout
+  title="Home"
+  description="Cleanrooms, HVAC, and process utilities engineered as one system — and handed over with the measurements that prove it holds."
+>
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <img src={HERO_PHOTO} alt="" fetchpriority="high" decoding="async" />
+    </div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy" data-reveal-group>
+        <Kicker text="01 / CONTROLLED ENVIRONMENTS" tone="dark" data-reveal-item />
+        <h1 class="hero-title" data-reveal-item>Air you can<br />put a number<br />on.</h1>
+        <p class="hero-sub" data-reveal-item>
+          Cleanrooms, HVAC, and process utilities engineered as one system — and handed over with the
+          measurements that prove it holds.
+        </p>
+        <div class="hero-actions" data-reveal-item>
+          <Button href="/contact" variant="primary">Start a project</Button>
+          <Button href="/projects" variant="outline-invert">See the work</Button>
+        </div>
+      </div>
+      <div class="hero-stats" data-reveal>
+        <StatTile label="PROJECTS" value="180+" size="lg" tone="dark" />
+        <StatTile label="FIRST-PASS AUDITS" value="100%" size="lg" tone="dark" />
+        <StatTile label="ON PAYROLL" value="45" size="lg" tone="dark" />
+      </div>
+    </div>
+  </section>
+
+  <section class="cascade">
+    <div class="wrap">
+      <div class="cascade-head" data-reveal-group>
+        <div data-reveal-item>
+          <Kicker text="02 / PRESSURE CASCADE" tone="light" />
+          <h2 class="cascade-title">Contamination moves with the pressure. So we decide where the pressure goes.</h2>
+        </div>
+        <p class="cascade-sub" data-reveal-item>Select a zone to see the regime we design and then prove at qualification.</p>
+      </div>
+
+      <div class="cascade-tabs" role="tablist" data-reveal-group>
+        {ZONES.map((z, i) => (
+          <button
+            type="button"
+            class="cascade-tab"
+            data-zone={i}
+            data-reveal-item
+            aria-selected={i === 0 ? 'true' : 'false'}
+          >
+            <span class="tab-code">{z.code}</span>
+            <span class="tab-pa">{z.pa}</span>
+            <span class="tab-name">{z.name}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="cascade-detail" data-reveal>
+        {ZONES.map((z, i) => (
+          <div class="cascade-panel" data-zone={i} hidden={i !== 0}>
+            <p class="cascade-detail-copy">{z.detail}</p>
+            <div>
+              <div class="detail-label">AIR CHANGES</div>
+              <div class="detail-value">{z.ach}</div>
+            </div>
+            <div>
+              <div class="detail-label">FILTRATION</div>
+              <div class="detail-value">{z.filter}</div>
+            </div>
+            <div>
+              <div class="detail-label">TYPICAL USE</div>
+              <div class="detail-value detail-value--sm">{z.use}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="scope">
+    <div class="wrap">
+      <div data-reveal>
+        <Kicker text="03 / SCOPE" tone="light" />
+        <h2 class="scope-title">Six disciplines that normally sit in six contracts.</h2>
+      </div>
+      <div class="scope-list" data-reveal-group>
+        {SCOPES.map((s, i) => (
+          <ListRow no={s.no} title={s.title} desc={s.desc} href={`/services#service-${i}`} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="equipment">
+    <div class="wrap">
+      <SectionHeading kicker="04 / EQUIPMENT" size="xl">
+        Specified, installed,<br />and still ours at year five.
+        <Fragment slot="aside">
+          <a href="/products" class="equipment-link">FULL CATALOGUE →</a>
+        </Fragment>
+      </SectionHeading>
+      <div class="equipment-grid" data-reveal-group>
+        {FEATURED_PRODUCTS.map((p) => (
+          <ProductCard
+            name={p.name}
+            href={`/products/${p.slug}`}
+            imageLabel={p.name}
+            imageHeight="130px"
+            photo={p.photo}
+            eyebrow={p.spec}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="wrap testimonial-grid">
+      <div data-reveal>
+        <Kicker text="05 / AFTER HANDOVER" tone="light" />
+        <h2 class="testimonial-title">What clients say once the dossier is filed.</h2>
+        <p class="testimonial-sub">
+          Collected from facility, QA, and procurement teams six months or more after we left site.
+        </p>
+        <div class="testimonial-dots" role="tablist">
+          {QUOTES.map((_, i) => (
+            <button
+              type="button"
+              class="dot-btn"
+              data-quote={i}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-label={`Show testimonial ${i + 1}`}
+            ><span class="dot-fill"></span></button>
+          ))}
+        </div>
+      </div>
+      <div class="testimonial-panel" data-reveal>
+        {QUOTES.map((q, i) => (
+          <blockquote class="quote" data-quote={i} hidden={i !== 0}>
+            <p class="quote-text">{q.text}</p>
+            <div class="quote-name">{q.name}</div>
+            <div class="quote-role">{q.role}</div>
+          </blockquote>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap, reduceMotion } from '../scripts/motion.js';
+
+  interface CrossfadeOptions {
+    /** Auto-advance interval in ms. Omit for click-only (e.g. the cascade tabs). */
+    autoplay?: number;
+    /** Pause the auto-advance/fill while the pointer is over this element. */
+    pauseTarget?: Element | null;
+  }
+
+  // Panels/quotes crossfade with GSAP instead of an instant `hidden` swap.
+  // They start server-rendered with `hidden` on every entry but the first
+  // (a clean no-JS fallback); once this runs, `hidden` is dropped in favour
+  // of opacity/visibility so the switch can animate. When `autoplay` is set,
+  // each tab's `.dot-fill` (if present) sweeps left-to-right as a countdown
+  // to the next slide — pausing that tween pauses the countdown itself, so
+  // hover-to-pause and the timing stay perfectly in sync.
+  function wireCrossfade(tabSelector: string, panelSelector: string, dataAttr: string, opts: CrossfadeOptions = {}) {
+    const tabs = Array.from(document.querySelectorAll<HTMLElement>(tabSelector));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>(panelSelector));
+    if (!tabs.length || !panels.length) return;
+
+    let active = tabs[0].dataset[dataAttr] ?? '0';
+    panels.forEach((p) => (p.hidden = false));
+    gsap.set(panels, { autoAlpha: 0 });
+    gsap.set(panels.find((p) => p.dataset[dataAttr] === active) ?? panels[0], { autoAlpha: 1 });
+
+    let fillTween: ReturnType<typeof gsap.fromTo> | undefined;
+    const autoplay = reduceMotion ? undefined : opts.autoplay;
+
+    function playFill(tab?: HTMLElement) {
+      fillTween?.kill();
+      const fill = tab?.querySelector<HTMLElement>('.dot-fill');
+      if (!fill || !autoplay) return;
+      fillTween = gsap.fromTo(
+        fill,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          duration: autoplay / 1000,
+          ease: 'none',
+          onComplete: () => {
+            const idx = tabs.findIndex((t) => t.dataset[dataAttr] === active);
+            goTo(tabs[(idx + 1) % tabs.length]?.dataset[dataAttr]);
+          },
+        }
+      );
+    }
+
+    function goTo(index?: string) {
+      if (index === undefined || index === active) return;
+      const current = panels.find((p) => p.dataset[dataAttr] === active);
+      const next = panels.find((p) => p.dataset[dataAttr] === index);
+      const nextTab = tabs.find((t) => t.dataset[dataAttr] === index);
+      if (!next) return;
+      active = index;
+
+      tabs.forEach((t) => {
+        t.setAttribute('aria-selected', t === nextTab ? 'true' : 'false');
+        const fill = t.querySelector<HTMLElement>('.dot-fill');
+        if (fill && t !== nextTab) gsap.set(fill, { scaleX: 0 });
+      });
+
+      if (current) gsap.to(current, { autoAlpha: 0, duration: 0.22, ease: 'power1.in', overwrite: true });
+      gsap.fromTo(
+        next,
+        { autoAlpha: 0, y: 6 },
+        { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: current ? 0.1 : 0, overwrite: true }
+      );
+
+      playFill(nextTab);
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => goTo(tab.dataset[dataAttr]));
+    });
+
+    if (autoplay && opts.pauseTarget) {
+      opts.pauseTarget.addEventListener('mouseenter', () => fillTween?.pause());
+      opts.pauseTarget.addEventListener('mouseleave', () => fillTween?.resume());
+    }
+
+    playFill(tabs.find((t) => t.dataset[dataAttr] === active));
+  }
+
+  wireCrossfade('.cascade-tab', '.cascade-panel', 'zone');
+  wireCrossfade('.dot-btn', '.quote', 'quote', {
+    autoplay: 6000,
+    pauseTarget: document.querySelector('.testimonial-grid'),
+  });
+</script>
+
+<style>
+  /* Full-bleed opener: the cleanroom photo spans the viewport, with an
+     ink gradient weighted to the left so the copy stays legible while the
+     room itself shows through on the right. */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(11, 13, 20, 0.94) 0%, rgba(11, 13, 20, 0.8) 40%, rgba(11, 13, 20, 0.35) 72%, rgba(11, 13, 20, 0.2) 100%),
+      linear-gradient(0deg, rgba(11, 13, 20, 0.85) 0%, rgba(11, 13, 20, 0) 34%);
+  }
+
+  .hero-inner {
+    min-height: min(860px, calc(100svh - 120px));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .hero-copy {
+    padding: 96px 56px 64px;
+    max-width: 780px;
+  }
+
+  .hero-title {
+    margin: 34px 0 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(44px, 7.4vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .hero-sub {
+    margin: 32px 0 0;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--text-slate-2);
+    max-width: 460px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 38px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-family: var(--font-mono);
+  }
+
+  .hero-stats > :global(.stat) {
+    padding: 24px 56px;
+  }
+
+  .hero-stats > :global(.stat + .stat) {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .cascade {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+    color: var(--ink);
+    padding: 80px 0 88px;
+  }
+
+  .cascade-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .cascade-title {
+    margin: 22px 0 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 46px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+    max-width: 620px;
+  }
+
+  .cascade-sub {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-body);
+    max-width: 330px;
+  }
+
+  .cascade-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .cascade-tab {
+    text-align: left;
+    cursor: pointer;
+    border: none;
+    padding: 26px 24px;
+    font-family: var(--font-body);
+    background: #fff;
+    color: var(--text-muted);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* These tabs switch the zone shown below, same as the SCOPE rows and
+     services accordion elsewhere on the site — they need the same fluid
+     clickable feedback rather than a silent bg swap on select. Scoped off
+     the active tab so hovering the already-selected (blue) one doesn't
+     fight its own state. */
+  .cascade-tab:not([aria-selected='true']):hover {
+    background: var(--blue-soft-2);
+    color: var(--ink);
+  }
+
+  .cascade-tab[aria-selected='true'] {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .tab-code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.7;
+    margin-bottom: 14px;
+  }
+
+  .tab-pa {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .tab-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* The readout stays dark on the light section — it reads as the
+     instrument panel the selected (blue) tab is plugged into. */
+  .cascade-detail {
+    background: var(--ink);
+    color: #fff;
+    display: grid;
+  }
+
+  .cascade-panel {
+    grid-area: 1 / 1;
+    padding: 36px 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
+    gap: 36px;
+    align-items: start;
+  }
+
+  .cascade-detail-copy {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #dde2ec;
+  }
+
+  .detail-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-slate);
+    margin-bottom: 8px;
+  }
+
+  .detail-value {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .detail-value--sm {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .scope {
+    border-bottom: 1px solid var(--border);
+    padding: 80px 0 90px;
+  }
+
+  .scope-title {
+    margin: 22px 0 48px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 46px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    max-width: 700px;
+  }
+
+  .scope-list {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .equipment {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+    padding: 80px 0 90px;
+  }
+
+  .equipment-link {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--blue);
+  }
+
+  .equipment-grid {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--grid-line);
+    border: 1px solid var(--grid-line);
+  }
+
+  .testimonials {
+    padding: 80px 0 90px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .testimonial-title {
+    margin: 22px 0 24px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.8vw, 44px);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+  }
+
+  .testimonial-sub {
+    margin: 0 0 32px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-body-2);
+  }
+
+  .testimonial-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .dot-btn {
+    position: relative;
+    width: 36px;
+    height: 4px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: var(--input-border);
+    overflow: hidden;
+  }
+
+  .dot-btn[aria-selected='true'] {
+    background: #C3C9D4;
+  }
+
+  .dot-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .testimonial-panel {
+    border-left: 2px solid var(--blue);
+    padding-left: 36px;
+    min-height: 260px;
+    display: grid;
+  }
+
+  .quote {
+    grid-area: 1 / 1;
+  }
+
+  .quote-text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.32;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .quote-name {
+    margin-top: 28px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .quote-role {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 5px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      min-height: min(760px, calc(100svh - 100px));
+    }
+    .hero-copy {
+      padding: 64px 24px 48px;
+    }
+    .hero-bg::after {
+      background:
+        linear-gradient(0deg, rgba(11, 13, 20, 0.95) 0%, rgba(11, 13, 20, 0.78) 55%, rgba(11, 13, 20, 0.55) 100%);
+    }
+    .hero-stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .hero-stats > :global(.stat) {
+      padding: 20px 24px;
+    }
+    .cascade-tabs {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cascade-panel {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .equipment-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .testimonial-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .testimonial-panel {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-stats > :global(.stat) {
+      padding: 18px 16px;
+    }
+    .hero-stats :global(.stat-value--lg) {
+      font-size: 24px;
+    }
+    .equipment-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

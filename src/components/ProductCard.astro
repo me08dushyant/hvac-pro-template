@@ -1,0 +1,103 @@
+---
+// Equipment/product tile — Home's equipment teaser, the full catalogue on
+// /products, and the "quoted with it" rail on a product detail page all
+// use this same card.
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  name: string;
+  href: string;
+  imageLabel: string;
+  imageHeight?: string;
+  photo?: string;
+  eyebrow?: string;
+  eyebrowTone?: 'muted' | 'blue';
+  desc?: string;
+  footnote?: string;
+  class?: string;
+}
+
+const {
+  name,
+  href,
+  imageLabel,
+  imageHeight = '140px',
+  photo,
+  eyebrow,
+  eyebrowTone = 'muted',
+  desc,
+  footnote,
+  class: className,
+} = Astro.props;
+---
+
+<a href={href} class:list={['pcard', className]} data-reveal-item>
+  <div class="pcard-img" style={`height:${imageHeight}`}>
+    <ImagePlaceholder label={imageLabel} photo={photo} fit={photo ? 'cover' : 'contain'} />
+  </div>
+  {eyebrow && <div class:list={['pcard-eyebrow', `pcard-eyebrow--${eyebrowTone}`]}>{eyebrow}</div>}
+  <h3 class="pcard-name">{name}</h3>
+  {desc && <p class="pcard-desc">{desc}</p>}
+  {footnote && <div class="pcard-foot">{footnote}</div>}
+</a>
+
+<style>
+  .pcard {
+    position: relative;
+    display: block;
+    background: var(--bg);
+    padding: 26px;
+    color: var(--ink);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .pcard:hover {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 14px 30px rgba(11, 13, 20, 0.08);
+    transform: translateY(-3px);
+    z-index: 1;
+  }
+
+  .pcard-img {
+    margin-bottom: 22px;
+  }
+
+  .pcard-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .pcard-eyebrow--muted {
+    color: var(--text-muted);
+  }
+
+  .pcard-eyebrow--blue {
+    color: var(--blue);
+  }
+
+  .pcard-name {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .pcard-desc {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-body-2);
+  }
+
+  .pcard-foot {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid #DDE0E8;
+    padding-top: 12px;
+  }
+</style>
